@@ -1,0 +1,1 @@
+ssh -i "cse330_keypair.pem" ec2-user@ec2-54-200-82-237.us-west-2.compute.amazonaws.com

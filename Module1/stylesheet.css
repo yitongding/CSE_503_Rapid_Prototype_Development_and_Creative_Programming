@@ -1,0 +1,33 @@
+#title {
+	font: 30px/36px Verdana, sans-serif
+}
+h1{
+	text-align: center;
+	color: blue;
+	font: Arial, "Times New Roman";
+	background-color: red
+}
+
+h1.happy{
+	text-align: center;
+	color: red;
+	font-family: Tahoma, "Arial Narrow";
+	font-style: italic;
+	background-color: green;
+	
+}
+
+h1.birthday{
+	text-align: center;
+	color: orange;
+	font-family: Tahoma, "Arial Narrow";
+	font-style: italic;
+	border:1px dashed black
+}
+
+h2{
+	text-align: right;
+	font-family: Tahoma, "Arial Narrow";
+	font-style: italic
+}
+
