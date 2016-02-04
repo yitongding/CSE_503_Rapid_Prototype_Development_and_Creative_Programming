@@ -10,14 +10,16 @@
     
     if (unlink($full_path))
     {
-        header("Location: ./del_success.html");
+        $_SESSION['message_return'] = "Delete success";
+        header("Location: ./message_return.php");
         exit;
     }
     else
     {
-        header("Location: ./del_failure.html");
+        $_SESSION['message_return'] = "Delete failure";
+        header("Location: ./message_return.php");
         exit;
-    }
+    } 
     
     
 ?>

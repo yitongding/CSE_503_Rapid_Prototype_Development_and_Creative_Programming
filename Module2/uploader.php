@@ -32,21 +32,23 @@
     if( move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $full_path) ){
         if (chmod ($full_path, 777))
         {
-            header("Location: upload_success.html");
+            $_SESSION['message_return'] = "Upload success";
+            header("Location: ./message_return.php");
             exit;
         }
-        else 
+        else
         {
-        header("Location: upload_failure.html");
-        exit;
-        }
+            $_SESSION['message_return'] = "Upload failure";
+            header("Location: ./message_return.php");
+            exit;
+        } 
     }
     else
     {
-        header("Location: upload_failure.html");
+        $_SESSION['message_return'] = "Upload failure";
+        header("Location: ./message_return.php");
         exit;
-    }
-    
+    } 
 ?>
 </p>
 </body>

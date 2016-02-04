@@ -22,13 +22,14 @@
     $dest_path = sprintf("../module2/%s/%s", $sharename, htmlentities($filename));
     if (copy($source_path, $dest_path))
     {
-        header("Location: ./share_success.html");
+        $_SESSION['message_return'] = "Share success";
+        header("Location: ./message_return.php");
         exit;
     }
     else
     {
-        $_SESSION['share_error'] = "Copy failure.";
-        header("Location: ./share_failure.php");
+        $_SESSION['message_return'] = "Share failure";
+        header("Location: ./message_return.php");
         exit;
     } 
     
