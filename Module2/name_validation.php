@@ -3,14 +3,14 @@
     {
         if( !preg_match('/^[\w_\.\-]+$/', $filename) ){
             echo "Invalid filename";
-            exit;
+            return 0;
         }
             
         if( !preg_match('/^[\w_\-]+$/', $username) ){
             echo "Invalid username";
-            exit;
+            return 0;
         }
-        return 0;
+        return 1;
     }
     
 ?>

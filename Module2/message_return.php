@@ -3,7 +3,7 @@
     
 <?php 
     session_start();
-    $message = $_SESSON['message_return'];
+    $message = $_SESSION['message_return'];
     
     printf("<head><title>%s</title></head>", $message);
     printf("<body><p>%s.</p>", $message);

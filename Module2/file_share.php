@@ -2,7 +2,7 @@
     session_start();
     
     include 'name_validation.php';
-    $filename = $_POST['filename'];
+    $filename = $_SESSION['filename'];
     $sharename = $_POST['sharename'];
     $username = $_SESSION['username'];
     name_validation($filename, $username);

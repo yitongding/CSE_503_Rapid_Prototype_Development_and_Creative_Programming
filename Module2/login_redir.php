@@ -9,22 +9,12 @@
 			session_start();
 			
 			$username_list = fopen("../module2/users.txt","r");
-			$user_found = 0;
-			while( !feof($username_list) & $user_found == 0)
-			{
-				$user_temp = fgets($username_list);
-				$user_trim = trim($user_temp);
-				if ($user_trim == $_POST['username'])
-				{
-					$user_found = 1;
-				}
-			}
-			fclose($username_list);
 			
-			if ($user_found == 0)
+            include './user_validation.php';
+			if (!user_validation($_POST['username']))
 			{
 				$_SESSION['username_error'] = 1;
-				header("Location: ./ login.php");
+				header("Location: ./login_page.php");
 				exit;
 			}
 			else

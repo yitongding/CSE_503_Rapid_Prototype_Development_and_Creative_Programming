@@ -25,8 +25,10 @@
 				if ($_SESSION['username_error'])
 				{
 					printf("Username error.");
+                    session_destroy();
 				}
 			}
+            
 			
 		?>
 	</p>
