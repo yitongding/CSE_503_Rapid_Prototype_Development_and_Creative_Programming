@@ -20,7 +20,7 @@
 		{
 			$file_name = $file_list[$file_num - 1];
             printf("<tr><td><a href='./file_read.php?file=%s'>%s</a></td>",htmlentities($file_name),htmlentities($file_name));
-            printf("<td><a href='./file_download.php?file=%s'>Download</a> </td>",htmlentities($file_name));
+            printf("<td><a href='./file_download.php?filename=%s'>Download</a> </td>",htmlentities($file_name));
             printf("<td><a href='./file_del.php?filename=%s'>Delete</a> </td>",htmlentities($file_name));
             printf("<td><a href='./share_page.php?filename=%s'>Share</a> </td>",htmlentities($file_name));
             printf("</tr>");
