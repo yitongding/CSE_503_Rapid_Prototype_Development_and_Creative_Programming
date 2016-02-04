@@ -11,7 +11,7 @@
 <body>
 	<?php
 		session_start();
-		printf("Hello, <strong>%s</strong>! Here are your files:",$_SESSION['username']);
+		printf("Hello, <strong>%s</strong>! Here are your files:",htmlentities($_SESSION['username']));
 		$dir = sprintf("../module2/%s",$_SESSION['username']);
 		$file_list = scandir($dir);
 		$file_num = count($file_list);
@@ -19,7 +19,7 @@
 		{
 			$file_name = $file_list[$file_num - 1];
 			//$flink = 
-			printf("<p><a href='./file_read.php?file=%s'>%s</a> \t",$file_name,$file_name);
+			printf("<p><a href='./file_read.php?file=%s'>%s</a> \t",htmlentities($file_name),htmlentities($file_name));
             /*printf("<form action='./file_del.php?file=%s' method='GET'><input type='submit' value='Delete File'></form></p>", $file_name);
             printf('
                 <form action="./login_redir.php?file_name=%s" method="POST">

@@ -41,7 +41,7 @@
                 echo "Error, opration undefined.";
             }
             else {
-                printf("Result: %.2f", $result);
+                printf("Result: %.2f", htmlentities($result));
             }
         ?>
         
