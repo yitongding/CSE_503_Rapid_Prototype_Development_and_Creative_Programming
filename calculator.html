@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+    <link rel="stylsheet" type="text/css" href="./cal_stylesheet.css"/>
+    -->
+    <title>My Calculator</title>
+</head>    
+
+<body>
+    <form action="./result.php" method="POST">
+        <p>
+            <strong>Type of Calculation</strong>
+            <input type="radio" name="cal_type" value="add" id="addinput" /><label for="addinput">Addition</label>
+            <input type="radio" name="cal_type" value="sub" id="subinput" /><label for="subinput">Subtration</label>
+            <input type="radio" name="cal_type" value="mul" id="mulinput" /><label for="mulinput">Multiplication</label>
+            <input type="radio" name="cal_type" value="div" id="divinput" /><label for="divinput">Division</label>       
+        </p>
+        <p>
+            <label for="firstnuminput">Fisrt Number:</label>
+            <input type="number" name="firstnum" id="firstnuminput" step="0.01" />
+            <label for="secondnuminput">Second Number:</label>
+            <input type="number" name="secondnum" id="secondnuminput" step="0.01"/>
+        </p>
+        <p>
+            <input type="submit" value="Send">
+            <input type="reset">
+        </p>
+    </form>    
+</body>
+
+</html>
+     
