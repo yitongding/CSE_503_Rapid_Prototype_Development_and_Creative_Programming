@@ -1,0 +1,8 @@
+show databases;
+
+du -k
+
+df -k
+
+/var/log/httpd/
+

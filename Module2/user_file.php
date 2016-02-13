@@ -6,7 +6,7 @@
     <link rel="stylsheet" type="text/css" href="./cal_stylesheet.css"/>
     -->
 	<title>User's Files</title>
-<head>
+</head>
 
 <body>
 	<?php

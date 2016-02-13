@@ -6,7 +6,7 @@
     <link rel="stylsheet" type="text/css" href="./cal_stylesheet.css"/>
     -->
 	<title>File system login</title>
-<head>
+</head>
 
 <body>
 	<p><strong>Welcome to file system!</strong></p>
