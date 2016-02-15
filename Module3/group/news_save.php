@@ -3,6 +3,7 @@
 	
 	$news_title = $_POST['news_title'];
 	$news_content = $_POST['news_content'];
+	date_default_timezone_set('America/Chicago');
 	$current_time = date('Y-m-d H:i:s');
 	
 	//insert news to the databse
@@ -14,7 +15,7 @@
 		exit;
 	}
 	 
-	$stmt->bind_param('ssss', $news_title, $_SESSION('user_id'),$news_content, $current_time);
+	$stmt->bind_param('siss', $news_title, $_SESSION['user_id'],$news_content, $current_time);
 	 
 	if ( $stmt->execute() ){
 		//if insert success, query news id from database

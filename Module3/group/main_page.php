@@ -20,16 +20,17 @@
 			Hello, <strong>%s</strong>!
 			<a href='./logout.php'> Logout </a>
 		</p>
-		", htmlentities($_SESSION['user_name']);
+		", htmlentities($_SESSION['user_name']));
 	}
 	else {
 		// if not loged in
 		printf("
 		<p>
-			<a href='./login_page.php'> Login </a>
-			<a href='./register_page.php'> Register </a>
+			<a href='./login_page.php'>Login</a> 
+			or 
+			<a href='./register_page.php'>Register</a>
 		</p>
-		")
+		");
 	}
 	
 	
@@ -39,7 +40,7 @@
 	<p>
 		<a href='./news_submit.php'>Want to submit your own story?</a>
 	<p>
-	")
+	");
 	
 	
 	/*************************/
@@ -47,7 +48,7 @@
 	/*************************/
 	require 'database.php';
  
-	$stmt = $mysqli->prepare("select news_title, news_timestamp from news order by news_timestamp");
+	$stmt = $mysqli->prepare("select news_id, news_title, news_timestamp from news order by news_timestamp");
 	if(!$stmt){
 		printf("Query Prep Failed: %s\n", $mysqli->error);
 		exit;
@@ -55,12 +56,12 @@
 	 
 	$stmt->execute();
 	 
-	$stmt->bind_result($news_title, $news_timestamp);
+	$stmt->bind_result($news_id, $news_title, $news_timestamp);
 	 
 	echo "<ul>\n";
 	while($stmt->fetch()){
-		printf("\t<li><a href='./file_read.php?file=%s'>%s</a> %s</li>\n",
-			htmlspecialchars($news_title),
+		printf("\t<li><a href='./news_read.php?news_id=%d'>%s</a> %s</li>\n",
+			htmlspecialchars($news_id),
 			htmlspecialchars($news_title),
 			htmlspecialchars($news_timestamp)
 		);

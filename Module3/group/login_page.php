@@ -18,7 +18,7 @@
 		</p>
 		<p>
 			<label for="passwordinput" >Password:</label>
-			<input type="text" name="password" id="passwordinput">
+			<input type="password" name="password" id="passwordinput">
 		</p>
 		<p> <input type="submit" value="Login"> </p>
 	</form>
@@ -31,6 +31,7 @@
 			{
 				if ($_SESSION['login_error'])
 				{
+					$_SESSION['login_error'] = 0;
 					printf("Username or password error.");
                     session_destroy();
 				}

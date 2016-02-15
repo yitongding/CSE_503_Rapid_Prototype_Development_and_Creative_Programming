@@ -31,7 +31,7 @@
 		$stmt->bind_result($cnt, $user_id);
 		$stmt->fetch();
 		$stmt->close();
-		if( $cnt == 1 && crypt($pwd_guess, $pwd_hash)==$pwd_hash){
+		if( $cnt == 1 ){
 			// Login succeeded!
 			$_SESSION['user_id'] = $user_id;
 			$_SESSION['user_name'] = $user_name;
@@ -43,8 +43,8 @@
 		}
 		else{
 			// Login failed; redirect back to the login screen
-			$_SESSION['login_error'] = 1;
-			header("Location: ./login_page.php");
+			$_SESSION['register_error'] = 2;
+			header("Location: ./register_page.php");
 			exit;
 		}
 	}

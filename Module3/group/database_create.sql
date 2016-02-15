@@ -19,7 +19,7 @@ CREATE TABLE news(
 	news_timestamp		TIMESTAMP,
 	/* ^ auto change when edit*/
 	PRIMARY KEY (news_id),
-	FOREIGN KEY news_author_id REFERENCES users(user_id)
+	FOREIGN KEY (news_author_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE comments(

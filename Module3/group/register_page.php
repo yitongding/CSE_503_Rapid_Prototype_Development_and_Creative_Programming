@@ -11,14 +11,14 @@
 
 <body>
 	<p><strong>Please enter your username and password</strong></p>
-	<form action="./login_redir.php" method="POST">
+	<form action="./register_redir.php" method="POST">
 		<p>
 			<label for="usernameinput" >New Username:</label>
 			<input type="text" name="username" id="usernameinput">
 		</p>
 		<p>
 			<label for="passwordinput" >New Password:</label>
-			<input type="text" name="password" id="passwordinput">
+			<input type="password" name="password" id="passwordinput">
 		</p>
 		<p> <input type="submit" value="Register"> </p>
 	</form>
@@ -29,9 +29,14 @@
 			session_start();
 			if( isset($_SESSION['register_error']))
 			{
-				if ($_SESSION['register_error'])
+				if ($_SESSION['register_error'] == 1)
 				{
 					printf("Username used.");
+                    session_destroy();
+				}
+				if ($_SESSION['register_error'] == 2)
+				{
+					printf("database error.");
                     session_destroy();
 				}
 			}
