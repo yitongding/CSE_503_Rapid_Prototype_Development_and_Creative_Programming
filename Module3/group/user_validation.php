@@ -25,7 +25,7 @@ function user_validation($username,$password)
 		// Login failed; redirect back to the login screen
 	}
 
-
+/*
 	$username_list = fopen("../module2/users.txt","r");
 	$user_found = 0;
 	while( !feof($username_list) & $user_found == 0)
@@ -39,6 +39,7 @@ function user_validation($username,$password)
 	}
 	fclose($username_list);
 	return $user_found;
+    */
 }
     
     

@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<!-- This is the page for login  -->
+<!-- This is the page for register  -->
 <html>
 
 <head>
 	<!--
     <link rel="stylsheet" type="text/css" href="./cal_stylesheet.css"/>
     -->
-	<title>Login</title>
+	<title>Register</title>
 </head>
 
 <body>
 	<p><strong>Please enter your username and password</strong></p>
 	<form action="./login_redir.php" method="POST">
 		<p>
-			<label for="usernameinput" >Username:</label>
+			<label for="usernameinput" >New Username:</label>
 			<input type="text" name="username" id="usernameinput">
 		</p>
 		<p>
-			<label for="passwordinput" >Password:</label>
+			<label for="passwordinput" >New Password:</label>
 			<input type="text" name="password" id="passwordinput">
 		</p>
-		<p> <input type="submit" value="Login"> </p>
+		<p> <input type="submit" value="Register"> </p>
 	</form>
 	
 	<!-- check if there is error -->
 	<p>
 		<?php
 			session_start();
-			if( isset($_SESSION['login_error']))
+			if( isset($_SESSION['register_error']))
 			{
-				if ($_SESSION['login_error'])
+				if ($_SESSION['register_error'])
 				{
-					printf("Username or password error.");
+					printf("Username used.");
                     session_destroy();
 				}
 			}
@@ -39,7 +39,6 @@
 			
 		?>
 	</p>
-	<p><a href="./register_page.php"> Click here to register </a><p>
 	<p><a href="./main_page.php"> Return to Main-page </a><p>
 </body>
 </html>

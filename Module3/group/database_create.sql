@@ -4,7 +4,8 @@ CREATE TABLE users(
 	user_id				SMALLINT UNSIGNED	AUTO_INCREMENT,
 	user_name			VARCHAR(20)			NOT NULL,
 	user_slated_pw		VARCHAR(50)			NOT NULL,
-	PRIMARY KEY (user_id)
+	PRIMARY KEY (user_id),
+	UNIQUE KEY (user_name)
 );
 
 
@@ -14,7 +15,7 @@ CREATE TABLE news(
 	news_author_id		SMALLINT UNSIGNED,
 	/* ^ will be linked as foreign key*/
 	news_content		VARCHAR(1000)		NOT NULL,
-	news_submit_time	TIME				NOT NULL,
+	news_submit_time	DATETIME			NOT NULL,
 	news_timestamp		TIMESTAMP,
 	/* ^ auto change when edit*/
 	PRIMARY KEY (news_id),
