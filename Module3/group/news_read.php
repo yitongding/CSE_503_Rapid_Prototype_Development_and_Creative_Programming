@@ -8,9 +8,8 @@
 	
 	//get news data from database 
 	require 'database.php';
-	
-	//$stmt = $mysqli->prepare("select news_title, news_author_id, news_content, news_submit_time, news_timestamp, users.user_name from news join users on (news.news_author_id = users.user_id) where news_id = ?");
-	$stmt = $mysqli->prepare("select news_title, news_author_id, news_content, news_submit_time, news_timestamp, users.user_name from news join users on (news.news_author_id = users.user_id) where news_id = ?");
+    
+	$stmt = $mysqli->prepare("select news_title, news_author_id, news_content, news_submit_time, news_timestamp, users.user_name, news_link from news join users on (news.news_author_id = users.user_id) where news_id = ?");
 	if(!$stmt){
 		printf("Query Prep Failed: %s\n", $mysqli->error);
 		exit;
@@ -18,7 +17,7 @@
 	$stmt->bind_param('i', $news_id);
 	$stmt->execute();
 	 
-	$stmt->bind_result($news_title, $news_author_id, $news_content, $news_submit_time, $news_timestamp, $news_author_name);
+	$stmt->bind_result($news_title, $news_author_id, $news_content, $news_submit_time, $news_timestamp, $news_author_name, $news_link);
 	$stmt->fetch();
 	$stmt->close();
 	
@@ -31,23 +30,31 @@
 	/*body starts here*/
 	printf ("<p>%s   ",htmlspecialchars($news_title));
 	// allowed orignal author to edit the news
-	if ($_SESSION['user_id'] == $news_author_id) {
-		printf("<a href='./news_edit.php?news_id=%d'> Edit this news </a>\n",$news_id);
-	} 
+    if (isset($_SESSION['user_id'])){
+        if ($_SESSION['user_id'] == $news_author_id) {
+	       printf("<a href='./news_edit.php?news_id=%d'> Edit this news </a>\n",$news_id);
+	   } 
+    }
+	
 	echo "</p>\n"; 
 	echo "<p> Author: ".htmlspecialchars($news_author_name)."    ";
 	echo "Submition time: ".$news_submit_time."   ";
-	echo "Last edit time: ".$news_timestamp."</p><br/>\n";
-
-	
-	
-
+	echo "Last edit time: ".$news_timestamp."</p>\n";
+    
+    //show the URL
+    if (is_null($news_link)) {
+        echo "<p>No link for this news.</p><br/>";
+    }
+    else{
+        echo "<p><a href=".htmlspecialchars($news_link)."URL:".htmlspecialchars($news_link)."</a></p><br/>";
+    }
+    //show content
 	echo "<p>".htmlspecialchars($news_content)."</p>\n";
 
 
 
 
-//show the comments
+    //show the comments
 	echo "<br/><br/><br/><p> Comments By Viewers </p><br/>";
 
 	/*****************************/
@@ -81,7 +88,9 @@
 	echo "</ul>\n";
 	 
 	$stmt->close();
-
+    
+    printf("<a href='./comment_submit.php?news_id=%d'>Submit a commment</a>", $news_id);
+    
 ?>
 
 </body>

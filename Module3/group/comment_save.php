@@ -1,22 +1,20 @@
 <?php
 	session_start();
 	
-	$news_title = $_POST['news_title'];
-	$news_content = $_POST['news_content'];
-    $news_link = $_POST['news_link'];
+	$comment_content = $_POST['comment_content'];
 	date_default_timezone_set('America/Chicago');
-	$current_time = date('Y-m-d H:i:s');
+	//$current_time = date('Y-m-d H:i:s');
 	
-	//insert news to the databse
+	//insert comment to the databse
 	require 'database.php';
 	
-	$stmt = $mysqli->prepare("insert into news (news_title, news_author_id, news_content, news_submit_time, news_link) values (?, ?, ?, ?, ?)");
+	$stmt = $mysqli->prepare("insert into comments ( comment_news_id, comment_author_id, comment_content) values (?, ?, ?)");
 	if(!$stmt){
 		printf("Query Prep Failed: %s\n", $mysqli->error);
 		exit;
 	}
 	 
-	$stmt->bind_param('sisss', $news_title, $_SESSION['user_id'],$news_content, $current_time, $news_link);
+	$stmt->bind_param('iis', $news_id, $_SESSION['user_id'],$commment_content);
 	 
 	if ( $stmt->execute() ){
 		//if insert success, query news id from database
