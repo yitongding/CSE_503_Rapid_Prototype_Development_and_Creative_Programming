@@ -23,7 +23,7 @@
                     <!-- title -->
                     <p>
                         <label for="news_titleinput" >News title:</label>
-                        <input type="text" name="news_title" id="news_titleinput" size="50" maxlength="100" >
+                        <input type="text" name="news_title" id="news_titleinput" size="50" maxlength="100" required>
                     </p>
                     <!-- URL -->
                     <p>
