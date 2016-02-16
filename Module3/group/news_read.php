@@ -26,13 +26,18 @@
 	
 	/*begin of the html*/
 	printf("<head>\n<title>NEWS:%s </title>\n</head>\n<body>\n<!-- show the news -->\n",htmlspecialchars($news_title));
-
+	
+	/******************/
 	/*body starts here*/
-	printf ("<p>%s   ",htmlspecialchars($news_title));
+	/******************/
+	echo '<!-- return to main page --> 
+	<p><a href="./main_page.php"> Return to Main-page </a><p>';
+	printf ("<p>%s &nbsp",htmlspecialchars($news_title));
 	// allowed orignal author to edit the news
     if (isset($_SESSION['user_id'])){
         if ($_SESSION['user_id'] == $news_author_id) {
-	       printf("<a href='./news_edit.php?news_id=%d'> Edit this news </a>\n",$news_id);
+	       printf("<a href='./news_edit.php?news_id=%d'>Edit</a> &nbsp\n",$news_id);
+		   printf("<a href='./news_delete.php?news_id=%d'> Delete</a>\n",$news_id);
 	   } 
     }
 	
@@ -56,7 +61,8 @@
 
     //show the comments
 	echo "<br/><br/><br/><p> <strong>Comments By Viewers </strong></p>";
-
+	printf("<a href='./comment_submit.php?news_id=%d'>Submit a commment</a>", $news_id);
+	
 	/*****************************/
 	/* show the list of comments */
 	/*****************************/
@@ -82,7 +88,8 @@
 			$cnt, htmlspecialchars($comment_author_name),$comment_timestamp);
         if(isset($_SESSION['user_id'])){
             if($_SESSION['user_id'] == $comment_author_id) {
-                printf("<p><a href='./comment_edit.php?comment_id=%d'>edit this comment </a></p>", $comment_id);
+                printf("<p><a href='./comment_edit.php?comment_id=%d'>Edit</a> &nbsp", $comment_id);
+				printf("<a href='./comment_delete.php?comment_id=%d'>Delete </a></p>", $comment_id);
             }
         }
 		
@@ -93,9 +100,8 @@
 	 
 	$stmt->close();
     
-    printf("<a href='./comment_submit.php?news_id=%d'>Submit a commment</a>", $news_id);
-    
 ?>
+
 
 </body>
 </html>
