@@ -3,6 +3,11 @@
 	
 	require 'database.php';
 	
+	if (empty($_POST['username']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	$stmt = $mysqli->prepare("select COUNT(*), user_id, user_slated_pw from users where user_name = ?");
 	if(!$stmt){
 		printf("Query Prep Failed: %s\n", $mysqli->error);

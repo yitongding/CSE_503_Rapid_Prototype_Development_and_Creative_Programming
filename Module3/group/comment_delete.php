@@ -8,6 +8,13 @@
 <?php
 	session_start();
 	
+	// prevent directly visit
+	if (is_null($_GET['comment_id']) | !isset($_SESSION['user_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
+	
 	$comment_id = $_GET['comment_id'];
 	//get comment data from database 
 	require 'database.php';

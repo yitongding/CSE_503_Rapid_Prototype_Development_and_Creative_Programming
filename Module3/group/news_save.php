@@ -1,6 +1,11 @@
 <?php
 	session_start();
 	
+	if (empty($_POST['news_title']) | !isset($_SESSION['user_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	$news_title = $_POST['news_title'];
 	$news_content = $_POST['news_content'];
     $news_link = $_POST['news_link'];

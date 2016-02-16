@@ -1,6 +1,12 @@
 <?php
 	session_start();
 	
+	// prevent directly visit
+	if (empty($_POST['news_id']) | !isset($_SESSION['user_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	$comment_content = $_POST['comment_content'];
     $news_id = $_POST['news_id'];
 	date_default_timezone_set('America/Chicago');

@@ -8,6 +8,13 @@
 <body>
 <?php
 	session_start();
+	
+	// prevent directly visit
+	if ( empty($_GET['comment_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	if (isset($_SESSION['comment_edit_error'])) {
 		if ($_SESSION['comment_edit_error'] == 1) {
 			$_SESSION['comment_edit_error'] = 0;

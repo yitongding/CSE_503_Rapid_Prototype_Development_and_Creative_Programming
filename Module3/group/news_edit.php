@@ -8,6 +8,12 @@
 <body>
 <?php
 	session_start();
+	
+	if (empty($_GET['news_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	if (isset($_SESSION['news_edit_error'])) {
 		if ($_SESSION['news_edit_error'] == 1) {
 			$_SESSION['news_edit_error'] = 0;

@@ -1,6 +1,11 @@
 <?php
 	session_start();
 	
+	if (empty($_POST['username']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	$user_name = $_POST['username'];
 	$user_password = $_POST['password'];
 	$user_slated_pw = crypt($user_password);

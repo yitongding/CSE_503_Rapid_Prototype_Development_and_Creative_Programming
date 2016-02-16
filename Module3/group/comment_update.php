@@ -1,6 +1,12 @@
 <?php
 	session_start();
 	
+	// prevent directly visit
+	if (empty($_POST['news_id']) | !isset($_SESSION['user_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	$comment_content = $_POST['comment_content'];
     $news_id = $_POST['news_id'];
 	$comment_id = $_POST['comment_id'];
@@ -25,7 +31,7 @@
 		exit;
 	}
 	else{
-		//register fail, return to register page
+		//update fail, return to update page
 		$stmt->close();
 		$_SESSION['comment_submit_error'] = 1;
 		header("Location: ./comment_submit.php?news_id=".$news_id);

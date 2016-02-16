@@ -4,6 +4,12 @@
 
 <?php
 	session_start();
+	
+	if (empty($_GET['news_id']) ){
+		header("Location: ./main_page.php");
+		exit;
+	}
+	
 	$news_id = $_GET['news_id'];
 	
 	//get news data from database 

@@ -14,11 +14,11 @@
 	<form action="./register_redir.php" method="POST">
 		<p>
 			<label for="usernameinput" >New Username:</label>
-			<input type="text" name="username" id="usernameinput">
+			<input type="text" name="username" id="usernameinput" maxlength="20" required>
 		</p>
 		<p>
 			<label for="passwordinput" >New Password:</label>
-			<input type="password" name="password" id="passwordinput">
+			<input type="password" name="password" id="passwordinput" maxlength="20" required>
 		</p>
 		<p> <input type="submit" value="Register"> </p>
 	</form>
