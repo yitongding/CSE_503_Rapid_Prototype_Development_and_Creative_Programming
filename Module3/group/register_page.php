@@ -7,6 +7,7 @@
     <link rel="stylsheet" type="text/css" href="./cal_stylesheet.css"/>
     -->
 	<title>Register</title>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
@@ -20,6 +21,9 @@
 			<label for="passwordinput" >New Password:</label>
 			<input type="password" name="password" id="passwordinput" maxlength="20" required>
 		</p>
+		<div class="g-recaptcha" data-sitekey="6LfNkxgTAAAAANeO0L7apDDAyhwLCH1oS-uwYOyb"></div>
+		<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl='en'">
+        </script>
 		<p> <input type="submit" value="Register"> </p>
 	</form>
 	
@@ -37,6 +41,11 @@
 				if ($_SESSION['register_error'] == 2)
 				{
 					printf("database error.");
+                    session_destroy();
+				}
+				if ($_SESSION['register_error'] == 3)
+				{
+					printf("Please finish the captcha.");
                     session_destroy();
 				}
 			}
