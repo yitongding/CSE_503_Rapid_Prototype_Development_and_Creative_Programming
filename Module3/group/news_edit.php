@@ -67,6 +67,7 @@
 			<textarea name="news_content" rows="20" cols="50" maxlength="1000"><?php echo  htmlspecialchars($news_content)?></textarea>
 		</p>
 		<!-- submit -->
+		<input type="hidden" name="token" value="<?php echo htmlspecialchars($_SESSION['token'])?>">
 		<input type="hidden" name="news_id" value="<?php echo htmlspecialchars($news_id)?>">
 		<p> <input type="submit" value="Submit"> </p>
 	</form>

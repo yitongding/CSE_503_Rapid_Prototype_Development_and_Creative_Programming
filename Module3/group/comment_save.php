@@ -7,6 +7,10 @@
 		exit;
 	}
 	
+	if($_SESSION['token'] !== $_POST['token']){
+		die("Request forgery detected");
+	}	
+	
 	$comment_content = $_POST['comment_content'];
     $news_id = $_POST['news_id'];
 	date_default_timezone_set('America/Chicago');

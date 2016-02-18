@@ -27,13 +27,14 @@
 		<!-- URL -->
 		<p>
 			<label for="news_linkinput" >News URL:</label>
-			<input type="text" name="news_link" id="news_linkinput" size="50" maxlength="120" >
+			<input type="url" name="news_link" id="news_linkinput" size="50" maxlength="120" >
 		</p>
 		<!-- content -->
 		<p>
 			<textarea name="news_content" rows="20" cols="50" maxlength="1000">Please type your story content here.</textarea>
 		</p>
 		<!-- submit -->
+		<input type="hidden" name="token" value="<?php echo htmlspecialchars($_SESSION['token'])?>">
 		<p> <input type="submit" value="Submit"> </p>
 	</form>
 <?php endif; ?>

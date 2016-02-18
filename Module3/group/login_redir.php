@@ -31,6 +31,7 @@
 		$_SESSION['user_id'] = $user_id;
 		$_SESSION['user_name'] = $_POST['username'];
 		$_SESSION['login_error'] = 0;
+		$_SESSION['token'] = substr(md5(rand()), 0, 10);
 
 		// Redirect to your target page
 		header("Location: ./main_page.php");

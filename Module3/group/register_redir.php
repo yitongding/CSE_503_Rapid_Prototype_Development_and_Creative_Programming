@@ -40,6 +40,7 @@
 			// Login succeeded!
 			$_SESSION['user_id'] = $user_id;
 			$_SESSION['user_name'] = $user_name;
+			$_SESSION['token'] = substr(md5(rand()), 0, 10);
 			$_SESSION['login_error'] = 0;
 
 			// Redirect to your main page

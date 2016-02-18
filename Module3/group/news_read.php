@@ -42,11 +42,27 @@
 	// allowed orignal author to edit the news
     if (isset($_SESSION['user_id'])){
         if ($_SESSION['user_id'] == $news_author_id) {
-	       printf("<a href='./news_edit.php?news_id=%d'>Edit</a> &nbsp\n",$news_id);
-		   printf("<a href='./news_delete.php?news_id=%d'> Delete</a>\n",$news_id);
-	   } 
+			printf("
+				<form action='./news_edit.php' method='POST'>  
+					<input type='hidden' name='token' value=%s> 
+					<input type='hidden' name='news_id' value=%d> 
+					<input type='submit' value='Edit'> 
+				</form> ", 
+				$_SESSION['token'], $news_id);
+			printf("
+				<form action='./news_delete.php' method='POST'>  
+					<input type='hidden' name='token' value=%s> 
+					<input type='hidden' name='news_id' value=%d> 
+					<input type='submit' value='Delete'> 
+				</form> ", 
+				$_SESSION['token'], $news_id);
+			//printf("<a href='./news_edit.php?news_id=%d'>Edit</a> &nbsp\n",$news_id);
+			//printf("<a href='./news_delete.php?news_id=%d'> Delete</a>\n",$news_id);
+		} 
     }
 	
+	
+	//show news title and detail information
 	echo "</p>\n"; 
 	echo "<p> Author: ".htmlspecialchars($news_author_name)."&nbsp;";
 	echo "Submition time: ".$news_submit_time."&nbsp;";
@@ -92,10 +108,25 @@
 	while($stmt->fetch()){
 		printf("<li><p> %d. %s post on %s </p>", 
 			$cnt, htmlspecialchars($comment_author_name),$comment_timestamp);
+		//allowed orignal author to edit the comment
         if(isset($_SESSION['user_id'])){
             if($_SESSION['user_id'] == $comment_author_id) {
-                printf("<p><a href='./comment_edit.php?comment_id=%d'>Edit</a> &nbsp", $comment_id);
-				printf("<a href='./comment_delete.php?comment_id=%d'>Delete </a></p>", $comment_id);
+                printf("
+	<form action='./comment_edit.php' method='POST'>
+		<input type='hidden' name='token' value=%s>
+		<input type='hidden' name='comment_id' value=%d>
+		<input type='submit' value='Edit'>
+	</form>", $_SESSION['token'], $comment_id);
+				
+				printf("
+	<form action='./comment_delete.php' method='POST'>
+		<input type='hidden' name='token' value=%s>
+		<input type='hidden' name='comment_id' value=%d> 
+		<input type='submit' value='Delete'> 
+	</form> ", $_SESSION['token'], $comment_id);
+				
+				//printf("<p><a href='./comment_edit.php?comment_id=%d'>Edit</a> &nbsp", $comment_id);
+				//printf("<a href='./comment_delete.php?comment_id=%d'>Delete </a></p>", $comment_id);
             }
         }
 		

@@ -9,12 +9,17 @@
 	session_start();
 	
 	// prevent directly visit
-	if (empty($_GET['news_id']) | !isset($_SESSION['user_id']) ){
+	if (empty($_POST['news_id']) | !isset($_SESSION['user_id']) ){
 		header("Location: ./main_page.php");
 		exit;
 	}
 	
-	$news_id = $_GET['news_id'];
+	//CSRF token check
+	if($_SESSION['token'] !== $_POST['token']){
+		die("Request forgery detected");
+	}
+	
+	$news_id = $_POST['news_id'];
 	//get comment data from database 
 	require 'database.php';
     

@@ -9,13 +9,16 @@
 	session_start();
 	
 	// prevent directly visit
-	if (is_null($_GET['comment_id']) | !isset($_SESSION['user_id']) ){
+	if (is_null($_POST['comment_id']) | !isset($_SESSION['user_id']) ){
 		header("Location: ./main_page.php");
 		exit;
 	}
 	
+	if($_SESSION['token'] !== $_POST['token']){
+		die("Request forgery detected");
+	}	
 	
-	$comment_id = $_GET['comment_id'];
+	$comment_id = $_POST['comment_id'];
 	//get comment data from database 
 	require 'database.php';
     

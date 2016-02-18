@@ -34,10 +34,11 @@
 				<p>
 					<textarea name="comment_content" rows="3" cols="50" maxlength="140">Please type your comment here.</textarea>
 				</p>
+				<input type="hidden" name="token" value="%s">
 				<!-- submit -->
 				<p> <input type="submit" value="Submit"> </p>
 			</form>
-		', $news_id);
+		', $news_id, $_SESSION['token']);
 	}
 	echo "<!-- return to the news-->";
 	echo "<p><a href='./news_read.php?news_id=".$news_id."'>return to the news</a></p>";

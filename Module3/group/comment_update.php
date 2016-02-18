@@ -7,6 +7,11 @@
 		exit;
 	}
 	
+	//CSRF token check
+	if($_SESSION['token'] !== $_POST['token']){
+		die("Request forgery detected");
+	}	
+	
 	$comment_content = $_POST['comment_content'];
     $news_id = $_POST['news_id'];
 	$comment_id = $_POST['comment_id'];

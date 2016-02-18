@@ -10,7 +10,7 @@
 	session_start();
 	
 	// prevent directly visit
-	if ( empty($_GET['comment_id']) ){
+	if ( empty($_POST['comment_id']) ){
 		header("Location: ./main_page.php");
 		exit;
 	}
@@ -22,7 +22,7 @@
 		}
 	}
 	
-	$comment_id = $_GET['comment_id'];
+	$comment_id = $_POST['comment_id'];
 	//get comment data from database 
 	require 'database.php';
     
@@ -60,6 +60,7 @@
 		<!-- news id(hiden input)-->
 		<input type="hidden" name="news_id" value="<?php echo htmlspecialchars($news_id)?>">
 		<input type="hidden" name="comment_id" value="<?php echo htmlspecialchars($comment_id)?>">
+		<input type="hidden" name="token" value="<?php echo htmlspecialchars($_SESSION['token'])?>">
 		<!-- submit -->
 		<p> <input type="submit" value="Submit"> </p>
 	</form>
