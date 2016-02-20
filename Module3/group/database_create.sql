@@ -17,6 +17,7 @@ CREATE TABLE news(
 	news_content		VARCHAR(1000)		NOT NULL,
 	news_submit_time	DATETIME			NOT NULL,
 	news_timestamp		TIMESTAMP,
+    news_view           INT,                DEFAULT 0,
 	/* ^ auto change when edit*/
 	PRIMARY KEY (news_id),
 	FOREIGN KEY (news_author_id) REFERENCES users(user_id)

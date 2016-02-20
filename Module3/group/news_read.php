@@ -15,7 +15,16 @@
 	//get news data from database 
 	require 'database.php';
     
-	$stmt = $mysqli->prepare("select news_title, news_author_id, news_content, news_submit_time, news_timestamp, users.user_name, news_link from news join users on (news.news_author_id = users.user_id) where news_id = ?");
+    //increase view count by 1
+    $stmt = $mysqli->prepare("update news set news_view = news_view + 1 where news_id = ?");
+	if(!$stmt){
+		printf("Query Prep Failed: %s\n", $mysqli->error);
+		exit;
+	}
+	$stmt->bind_param('i', $news_id);
+	$stmt->execute();
+    
+	$stmt = $mysqli->prepare("select COUNT(*),news_title, news_author_id, news_content, news_submit_time, news_timestamp, users.user_name, news_link, news_view from news join users on (news.news_author_id = users.user_id) where news_id = ?");
 	if(!$stmt){
 		printf("Query Prep Failed: %s\n", $mysqli->error);
 		exit;
@@ -23,13 +32,13 @@
 	$stmt->bind_param('i', $news_id);
 	$stmt->execute();
 	 
-	$stmt->bind_result($news_title, $news_author_id, $news_content, $news_submit_time, $news_timestamp, $news_author_name, $news_link);
+	$stmt->bind_result($cnt, $news_title, $news_author_id, $news_content, $news_submit_time, $news_timestamp, $news_author_name, $news_link, $news_view);
 	$stmt->fetch();
 	$stmt->close();
 	
-	//echo "userid".$_SESSION['user_id'];
-	//echo "author_id".$news_author_id;
-	
+    
+    
+    
 	/*begin of the html*/
 	printf("<head>\n<title>NEWS:%s </title>\n</head>\n<body>\n<!-- show the news -->\n",htmlspecialchars($news_title));
 	
@@ -38,7 +47,13 @@
 	/******************/
 	echo '<!-- return to main page --> 
 	<p><a href="./main_page.php"> Return to Main-page </a><p>';
-	printf ("<p>%s &nbsp",htmlspecialchars($news_title));
+    //show error if news not found
+    if ($cnt==0){
+        echo "No Such News.";
+        exit;
+    }
+    
+	printf ("<p><strong>%s </strong>&nbsp;",htmlspecialchars($news_title));
 	// allowed orignal author to edit the news
     if (isset($_SESSION['user_id'])){
         if ($_SESSION['user_id'] == $news_author_id) {
@@ -56,7 +71,7 @@
 					<input type='submit' value='Delete'> 
 				</form> ", 
 				$_SESSION['token'], $news_id);
-			//printf("<a href='./news_edit.php?news_id=%d'>Edit</a> &nbsp\n",$news_id);
+			//printf("<a href='./news_edit.php?news_id=%d'>Edit</a> &nbsp;\n",$news_id);
 			//printf("<a href='./news_delete.php?news_id=%d'> Delete</a>\n",$news_id);
 		} 
     }
@@ -64,10 +79,10 @@
 	
 	//show news title and detail information
 	echo "</p>\n"; 
-	echo "<p> Author: ".htmlspecialchars($news_author_name)."&nbsp;";
-	echo "Submition time: ".$news_submit_time."&nbsp;";
-	echo "Last edit time: ".$news_timestamp."</p>\n";
-    
+	echo "<p> Author: ".htmlspecialchars($news_author_name)."&nbsp;&nbsp;&nbsp;&nbsp;";
+	echo "Submition time: ".$news_submit_time."&nbsp;&nbsp;&nbsp;&nbsp;";
+	//echo "Last edit time: ".$news_timestamp."&nbsp;";
+    echo $news_view."&nbsp; Viewers</p>\n";
     //show the URL
     if (is_null($news_link)) {
         echo "<p>No link for this news.</p><br/>";
@@ -125,7 +140,7 @@
 		<input type='submit' value='Delete'> 
 	</form> ", $_SESSION['token'], $comment_id);
 				
-				//printf("<p><a href='./comment_edit.php?comment_id=%d'>Edit</a> &nbsp", $comment_id);
+				//printf("<p><a href='./comment_edit.php?comment_id=%d'>Edit</a> &nbsp;", $comment_id);
 				//printf("<a href='./comment_delete.php?comment_id=%d'>Delete </a></p>", $comment_id);
             }
         }

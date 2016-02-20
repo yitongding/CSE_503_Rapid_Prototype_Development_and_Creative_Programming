@@ -13,18 +13,6 @@ foreign key (course_code) references courses(course_code)
 );
 
 
-160211 11:43:36 Error in foreign key constraint of table wustl/grades:
-foreign key (dept_id) references departments(dept_id), foreign key (course_code) references courses(course_code) ):
-Cannot find an index in the referenced table where the
-referenced columns appear as the first columns, or column types
-in the table and the referenced table do not match for constraint.
-Note that the internal storage type of ENUM and SET changed in
-tables created with >= InnoDB-4.1.12, and such columns in old tables
-cannot be referenced by such columns in new tables.
-See http://dev.mysql.com/doc/refman/5.5/en/innodb-foreign-key-constraints.html
-for correct foreign key definition.
-
-
 select * from departments where abbreviation='CSE';
 
 insert into courses (school_code, dept_id, course_code, name) values

@@ -9,7 +9,7 @@
 <?php
 	session_start();
 	
-	if (empty($_GET['news_id']) ){
+	if (empty($_POST['news_id']) ){
 		header("Location: ./main_page.php");
 		exit;
 	}
@@ -21,7 +21,7 @@
 		}
 	}
 	
-	$news_id = $_GET['news_id'];
+	$news_id = $_POST['news_id'];
 	//get news data from database 
 	require 'database.php';
     
