@@ -57,8 +57,7 @@ avg_grade < 50;
 
 select 
 id,
-first_name, 
-last_name, 
+email_address,
 avg(grades.grade) as avg_grade
 from students join grades on
 (students.id=grades.student_id)
