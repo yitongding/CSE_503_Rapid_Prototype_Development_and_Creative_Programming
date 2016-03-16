@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+    <link rel="stylsheet" type="text/css" href="./cal_stylesheet.css"/>
+    -->
+    <title>My Calculator</title>
+	
+</head>    
+
+<body>
+	<p>
+		<strong>Type of Calculation</strong>
+		<input type="radio" name="cal_type" value="add" id="addinput" /><label for="addinput">Addition</label>
+		<input type="radio" name="cal_type" value="sub" id="subinput" /><label for="subinput">Subtration</label>
+		<input type="radio" name="cal_type" value="mul" id="mulinput" /><label for="mulinput">Multiplication</label>
+		<input type="radio" name="cal_type" value="div" id="divinput" /><label for="divinput">Division</label>       
+	</p>
+	<p>
+		<label for="firstnuminput">Fisrt Number:</label>
+		<input type="number" name="firstnum" id="firstnuminput" step="any" />
+		<label for="secondnuminput">Second Number:</label>
+		<input type="number" name="secondnum" id="secondnuminput" step="any"/>
+	</p>
+	<p>	
+		<strong> Result: </strong>
+		<output id="output"> The output will show here. </output>
+	</p>
+	<script type="text/javascript">
+	
+		function update_result() {
+			var fnumber = Number(document.getElementById("firstnuminput").value);
+			var snumber = Number(document.getElementById("secondnuminput").value);
+			var add_radio = document.getElementById("addinput");
+			var sub_radio = document.getElementById("subinput");
+			var mul_radio = document.getElementById("mulinput");
+			var div_radio = document.getElementById("divinput");
+			
+			var result = 0;
+			if (add_radio.checked){
+				result = fnumber + snumber;
+			}
+			else if (sub_radio.checked){
+				result = fnumber - snumber;
+			}
+			else if (mul_radio.checked){
+				result = fnumber * snumber;
+			}
+			else if (div_radio.checked){
+				if (snumber != 0){
+					result = fnumber / snumber;
+				}
+				else {
+					result = "Second number can't be 0 for divition.";
+				}
+			}
+			else {
+				result = "The output will show here.";
+			}
+			
+			document.getElementById("output").textContent = result;
+			//var htmlParent = document.getElementsByTagName("output");				//set the var to output tag
+			//var htmlDateObj = document.createElement("strong");						//creat a strong tag
+			//htmlDateObj.appendChild(document.createTextNode(result));				//put the reslut in the strong tag
+			//htmlParent.appendChild(htmlDateObj);									//append the strong tag to the out put tag
+		}
+		
+		document.getElementById("firstnuminput").addEventListener("change", update_result, false);
+		document.getElementById("secondnuminput").addEventListener("change", update_result, false);
+		document.getElementById("addinput").addEventListener("change", update_result, false);
+		document.getElementById("subinput").addEventListener("change", update_result, false);
+		document.getElementById("mulinput").addEventListener("change", update_result, false);
+		document.getElementById("divinput").addEventListener("change", update_result, false);
+		
+	</script>
+</body>
+
+</html>
+     

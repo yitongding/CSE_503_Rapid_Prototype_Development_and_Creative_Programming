@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8"/>
+<title>My Calender</title>
+<style type="text/css">
+body{
+	width: 760px; /* how wide to make your web page */
+	background-color: teal; /* what color to make the background */
+	margin: 0 auto;
+	padding: 0;
+	font:12px/16px Verdana, sans-serif; /* default font */
+}
+div#main{
+	background-color: #FFF;
+	margin: 0;
+	padding: 10px;
+}
+/*dialog forms (no need to show) */
+#register, #new_event, #event_share{
+    display: none;
+}
+
+/*functional button css*/
+#prev_month_btn { float: left; }
+#next_month_btn { float: right; }
+
+/*calender css*/
+#date_ind { list-style-type: none; margin: 0; padding: 0; width: 750px; height: 650px;}
+#day_ind  { list-style-type: none; margin: 0; padding: 0; width: 750px; height: 10px;}
+#date_ind li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 2em; text-align: center; }
+#day_ind li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 25px; font-size: 2em; text-align: center; }
+#calender_title { font-size: 3em; text-align: center}
+</style>
+<!--
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+-->
+<link rel="stylesheet" href="jquery-ui.css">
+<script src="jquery.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+    
+</head>
+<body><div id="main">
+
+<!-- login part code -->    
+<div id="login">
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="login_btn">Log In</button>
+    <button id="register_btn">Register</button>    
+</div>
+
+<!-- logout part code -->    
+<div id="logout">
+    <button id="logout_btn">Log Out</button>
+</div>
+
+<!-- functional inputs -->
+<div id="icons">
+    <select name="show_event_tag" id="show_event_tag">
+        <option>All</option>
+        <option>tag1</option>
+        <option>tag2</option>
+        <option>tag3</option>
+        <option>tag4</option>
+        <option>tag5</option>
+    </select>
+    <button id="share_calender_btn">Share Calender</button>
+</div>
+
+<script type="text/javascript" src="log.js"></script> <!-- load the JavaScript file -->
+
+<button id="prev_month_btn">Previous Month</button>
+<button id="next_month_btn">Next Month</button>
+<script type="text/javascript" src="calender.js"></script> <!-- load the JavaScript file -->
+
+<!-- begin of the calender -->
+<div id="calender">
+    <p id="calender_title"> </p>
+    <ul id="day_ind">
+        <li class="ui-state-default">Sun</li>
+        <li class="ui-state-default">Mon</li>
+        <li class="ui-state-default">Tue</li>
+        <li class="ui-state-default">Wed</li>
+        <li class="ui-state-default">Thu</li>
+        <li class="ui-state-default">Fri</li>
+        <li class="ui-state-default">Sat</li>
+    </ul>
+    
+    <ul id="date_ind">
+        
+    </ul>    
+</div>
+
+<!--dialog for create new event -->
+<div id="new_event" title="new event page">
+    <input type="text" name="new_event_title" id="new_event_title" size="50" maxlength="100" placeholder="Event Title" required>
+    <input type="date" name="new_event_date" id="new_event_date" required>
+    <select name="new_event_tag" id="new_event_tag">
+        <option>none</option>
+        <option>tag1</option>
+        <option>tag2</option>
+        <option>tag3</option>
+        <option>tag4</option>
+        <option>tag5</option>
+    </select>
+    <input type="text" name="new_event_share" id="new_event_share" placeholder="Share with Someone">
+    <button id="new_event_btn">Submit</button> 
+</div>
+
+<!-- dialog for share calender -->
+<div id="calender_share" title="share calender">
+    <input type="text" name="new_calender_share" id="new_calender_share" placeholder="Share with Someone">
+    <button id="new_calender_share_btn">Share</button>
+</div>
+
+<!-- new regsiter code, this is a jQ dialog -->
+<div id="register" title="register page">
+    <input type="text" id="new_username" placeholder="New Username" />
+    <input type="password" id="new_password" placeholder="New Password" />
+    <button id="new_register_btn">Register</button>
+</div>
+
+</div></body>
+</html>

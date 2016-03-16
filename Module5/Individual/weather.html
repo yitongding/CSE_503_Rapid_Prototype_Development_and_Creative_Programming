@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="http://classes.engineering.wustl.edu/cse330/content/weather.css">
+    <title>Weather Forecast</title>
+	
+	
+</head> 
+
+<body>
+
+	<div class="weather" id="weatherWidget">
+		<div class="weather-loc"></div>
+		<div class="weather-humidity"></div>
+		<div class="weather-temp"></div>
+		<img class="weather-tomorrow" />
+		<img class="weather-dayaftertomorrow" />
+	</div>
+	<input type="button" name="refresh" id="refreshbotton" value="Refresh">
+	<script type="text/javascript">
+		function fetchWeather() {
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.open("POST", "http://classes.engineering.wustl.edu/cse330/content/weather_json.php", true);
+			xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xmlHttp.addEventListener("load", getJSONCallback, false);
+			xmlHttp.send(null);
+		}
+		
+		function getJSONCallback(event){
+			var htmlParent = document.getElementById("weatherWidget");
+			var jsonData = JSON.parse(event.target.responseText);
+			
+			document.getElementsByClassName("weather-loc")[0].innerHTML = "<strong>"+jsonData.location.city+"</strong>&nbsp;"+jsonData.location.state;
+			document.getElementsByClassName("weather-humidity")[0].textContent = jsonData.atmosphere.humidity;
+			document.getElementsByClassName("weather-temp")[0].textContent = jsonData.current.temp;
+			document.getElementsByClassName("weather-tomorrow")[0].setAttribute("src","http://us.yimg.com/i/us/nws/weather/gr/"+jsonData.tomorrow.code+"ds.png");
+			document.getElementsByClassName("weather-dayaftertomorrow")[0].setAttribute("src","http://us.yimg.com/i/us/nws/weather/gr/"+jsonData.dayafter.code+"ds.png");
+			
+		}
+		
+		document.addEventListener("DOMContentLoaded", fetchWeather, false);
+		document.getElementById("refreshbotton").addEventListener("click", fetchWeather, false);
+	</script>
+</body>
+
+</html>
