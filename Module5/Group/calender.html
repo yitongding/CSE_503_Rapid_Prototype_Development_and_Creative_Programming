@@ -16,7 +16,7 @@ div#main{
 	padding: 10px;
 }
 /*dialog forms (no need to show) */
-#register, #new_event, #event_share{
+#register, #new_event, #calender_share, #event_edit{
     display: none;
 }
 
@@ -65,6 +65,9 @@ div#main{
         <option>tag3</option>
         <option>tag4</option>
         <option>tag5</option>
+    </select>
+    <select name="show_event_user" id="show_event_user">
+        <option>MySelf</option>
     </select>
     <button id="share_calender_btn">Share Calender</button>
 </div>
@@ -120,6 +123,23 @@ div#main{
     <input type="text" id="new_username" placeholder="New Username" />
     <input type="password" id="new_password" placeholder="New Password" />
     <button id="new_register_btn">Register</button>
+</div>
+
+<!-- event detail and edit dialog -->
+<div id="event_edit" title="event edit page">
+    <input type="text" name="edit_event_title" id="edit_event_title" size="50" maxlength="100" required>
+    <input type="date" name="edit_event_date" id="edit_event_date" required>
+    <select name="edit_event_tag" id="edit_event_tag">
+        <option>none</option>
+        <option>tag1</option>
+        <option>tag2</option>
+        <option>tag3</option>
+        <option>tag4</option>
+        <option>tag5</option>
+    </select>
+    <input type="text" name="edit_event_share" id="edit_event_share" placeholder="Share with Someone New">
+    <button id="edit_event_btn">Submit</button> 
+    <button id="delete_event_btn">Delete</button> 
 </div>
 
 </div></body>

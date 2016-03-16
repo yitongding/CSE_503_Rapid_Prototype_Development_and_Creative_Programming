@@ -14,7 +14,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June", "July"
 /********************/
 
 //current month
-var currentMonth = new Month(2016, 2);
+var currentMonth = new Month(2016, 2); //March 2016
  
 // Change the month when the "next" button is pressed
 document.getElementById("next_month_btn").addEventListener("click", function(event){
@@ -27,22 +27,83 @@ $("#prev_month_btn").click(function(event){
     updateCalendar();
 });
 
-
+// updeate calender when month change
 function updateCalendar(){
 	var weeks = currentMonth.getWeeks();
     $("#calender_title").html(monthNames[currentMonth.month]+"&nbsp;"+currentMonth.year);
-    $("#date_ind").html(" ");
+    $("#date_ind").html(" "); //print the title month
+    
+    var signin_flag = signin_check(); // check the if the user have checked in
+    
+    if (signin_flag() ) {
+        jsonData = event_request(currentMonth.year, currentMonth.month,  "#show_event_tag".val() ); //request event data from server
+    }
+    
 	for(var w in weeks){
 		var days = weeks[w].getDates();
 		for(var d in days){
-            $("#date_ind").append('<li class="ui-state-default">'+days[d].getDate()+'</li>');
+            $("#date_ind").append('<li class="ui-state-default">'+days[d].getDate()+'<br>'); //add a day
+            if (signin_flag) {
+                for (e in jsonData.events){
+                    if (jsonData.events[e].date == days[d].getDate() && jsonData.events[e].owner == "#show_event_user".val() ){ //if day and user match
+                        $("#date_ind").append(jsonData.events[e].time + '<a id="' + jsonData.events[e].eid + '" class="event_brf">' + jsonData.events[e].title + '</a>');
+                    }
+                }
+            }
+            $("#date_ind").append('</li>');
 		}
 	}
+    
+    $(".event_brf").click(show_event_detail(event)); //add event listener for each event link
 }
 
+// ask events for certain month, tag and user from the server, return json type data
+function event_request(year, month, tag){
+    var dataString = "year=" + encodeURIComponent(year) + "&month=" + encodeURIComponent(month) + "&tag=" + encodeURIComponent(tag);
+    var Data = null;
+    
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "register_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+    }, false);
+    xmlHttp.send(dataString);
+    
+    return Data;
+} 
+
+
+// request event data by event's id
+function event_request_id(event_id){
+    var dataString = "event_id=" + encodeURIComponent(event_id);
+    var Data = null;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "register_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+    }, false);
+    xmlHttp.send(dataString);
+    return Data;
+}
+
+function show_event_detail(event){
+    var eid = event.target.id;
+    jsonData = event_request_id(eid);
+    $("#edit_event_title").val(jsonData.event.title);
+    $("#edit_event_date").val(jsonData.event.date);
+    $("#edit_event_tag").val(jsonData.event.tag);
+    $("#event_edit").dialog();
+}
+
+
+
+// update calender when tag selection change 
+/*
 function showtag(){
     var tag_value = $("#show_event_tag").val();
-    var jsondata = getdata();
+    var jsondata = event_request();
     for (d in jsondata){
         var event = jsondata.event[d];
         if(event.tag == tag_value){
@@ -50,11 +111,18 @@ function showtag(){
         }
     }
 }
+*/
 
+// initial calender when page is ready
 $(document).ready(updateCalendar);
 
-$("#show_event_tag").change(showtag);
+// tag selection listener
+$("#show_event_tag").change(updateCalendar);
 
+// new calender share listener
 $("#share_calender_btn").click(function(event){
     $("#calender_share").dialog();
 });
+
+//
+$("")
