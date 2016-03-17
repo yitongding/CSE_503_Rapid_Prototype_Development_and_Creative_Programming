@@ -63,7 +63,7 @@ function event_request(year, month, tag){
     var Data = null;
     
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "register_ajax.php", true);
+    xmlHttp.open("POST", "events_provider_ajax.php", true);
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttp.addEventListener("load",function(event){
         Data = JSON.parse(event.target.responseText);
@@ -79,7 +79,7 @@ function event_request_id(event_id){
     var dataString = "event_id=" + encodeURIComponent(event_id);
     var Data = null;
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("POST", "register_ajax.php", true);
+    xmlHttp.open("POST", "events_provider_id_ajax.php", true);
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttp.addEventListener("load",function(event){
         Data = JSON.parse(event.target.responseText);
@@ -88,14 +88,102 @@ function event_request_id(event_id){
     return Data;
 }
 
+
+// show even detail dialog
 function show_event_detail(event){
     var eid = event.target.id;
     jsonData = event_request_id(eid);
     $("#edit_event_title").val(jsonData.event.title);
     $("#edit_event_date").val(jsonData.event.date);
     $("#edit_event_tag").val(jsonData.event.tag);
+    $("#edit_event_id").val(eid);
     $("#event_edit").dialog();
 }
+
+// event create uploader
+function create_event_upload(){
+    var title = $("#new_event_title").val();
+    var date = $("#new_event_date").val();
+    var tag = $("new_event_tag").val();
+    var share = $("#new_event_share").val();
+    
+    var dataString = "title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date) + "&tag=" + encodeURIComponent(tag) + "&share=" + encodeURIComponent(share);
+    var Data = null;
+    
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "events_creater_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+    }, false);
+    xmlHttp.send(dataString);
+    if (Data.success) {
+        alert("Event create success.");
+    } else {
+        alert("Event create fail.");
+    }
+}
+
+// event edit uploader
+function edit_event_upload(){
+    var title = $("#edit_event_title").val();
+    var date = $("#edit_event_date").val();
+    var tag = $("edit_event_tag").val();
+    var share = $("#edit_event_share").val();
+    var eid = $("#edit_event_id").val();
+    
+    var dataString = "title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date) + "&tag=" + encodeURIComponent(tag) + "&share=" + encodeURIComponent(share) + "&eid=" + encodeURIComponent(eid);
+    var Data = null;
+    
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "events_editer_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+    }, false);
+    xmlHttp.send(dataString);
+    if (Data.success) {
+        alert("Event edit success.");
+    } else {
+        alert("Event edit fail.");
+    }
+}
+
+// event delet uploader
+function delete_event_upload(){
+    var eid = $("#edit_event_id").val();
+    var dataString = "eid=" + encodeURIComponent(eid);
+    var Data = null;
+    
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "events_deleter_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+    }, false);
+    xmlHttp.send(dataString);
+    if (Data.success) {
+        alert("Event delete success.");
+    } else {
+        alert("Event delete fail.");
+    }
+}
+
+// initial calender when page is ready
+$(document).ready(updateCalendar);
+
+// tag selection listener
+$("#show_event_tag").change(updateCalendar);
+
+// new calender share listener
+$("#share_calender_btn").click(function(event){
+    $("#calender_share").dialog();
+});
+
+// event create, edit, delete button listener
+$("#new_event_btn").click(create_event_upload);
+$("#edit_event_btn").click(edit_event_upload);
+$("#delete_event_btn").click(delete_event_upload);
 
 
 
@@ -112,17 +200,3 @@ function showtag(){
     }
 }
 */
-
-// initial calender when page is ready
-$(document).ready(updateCalendar);
-
-// tag selection listener
-$("#show_event_tag").change(updateCalendar);
-
-// new calender share listener
-$("#share_calender_btn").click(function(event){
-    $("#calender_share").dialog();
-});
-
-//
-$("")

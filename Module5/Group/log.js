@@ -15,7 +15,7 @@ function loginAjax(event){
 		if(jsonData.success){
 			$("#login").hide();
             $("#logout").show();
-            ini_calender(jsonData.username);
+            updateCalendar();
             alert("You've been Logged In!");
 		}else{
 			alert("You were not logged in.  "+jsonData.message);
@@ -30,7 +30,7 @@ function logoutAjax(event){
 	xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	xmlHttp.addEventListener("load", function(){
         $("#login").show();
-        ini_calender();
+        updateCalendar();
         $("#logout").hide();
     },false);
     xmlHttp.send(null); // Send the data
@@ -55,7 +55,7 @@ function registerAjax(event){
 		if(jsonData.success){
 			$("#login").hide();
             $("#logout").show();
-            ini_calender(jsonData.username);
+            updateCalendar();
             alert("You've registered!");
 		}else{
 			alert("Register error."+jsonData.message);
