@@ -27,6 +27,20 @@ $("#prev_month_btn").click(function(event){
     updateCalendar();
 });
 
+// check the statue of log in
+function signin_check(){
+    var Data = null;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "signin_check_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+    }, false);
+    xmlHttp.send(null);
+    
+    return Data.success;
+}
+
 // updeate calender when month change
 function updateCalendar(){
 	var weeks = currentMonth.getWeeks();
@@ -36,7 +50,7 @@ function updateCalendar(){
     var signin_flag = signin_check(); // check the if the user have checked in
     
     if (signin_flag() ) {
-        jsonData = event_request(currentMonth.year, currentMonth.month,  "#show_event_tag".val() ); //request event data from server
+        jsonData = event_request(currentMonth.year, currentMonth.month); //request event data from server
     }
     
 	for(var w in weeks){
@@ -58,8 +72,8 @@ function updateCalendar(){
 }
 
 // ask events for certain month, tag and user from the server, return json type data
-function event_request(year, month, tag){
-    var dataString = "year=" + encodeURIComponent(year) + "&month=" + encodeURIComponent(month) + "&tag=" + encodeURIComponent(tag);
+function event_request(year, month){
+    var dataString = "year=" + encodeURIComponent(year) + "&month=" + encodeURIComponent(month);
     var Data = null;
     
     var xmlHttp = new XMLHttpRequest();
@@ -149,7 +163,7 @@ function edit_event_upload(){
     }
 }
 
-// event delet uploader
+// event delete uploader
 function delete_event_upload(){
     var eid = $("#edit_event_id").val();
     var dataString = "eid=" + encodeURIComponent(eid);

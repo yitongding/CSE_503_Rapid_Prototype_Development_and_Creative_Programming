@@ -1,4 +1,6 @@
 <?php
+header("Content-Type: application/json"); // 
+
 $user_name = $_POST['username'];
 $user_password = $_POST['password'];
 $user_slated_pw = crypt($user_password);
@@ -34,21 +36,25 @@ if ( $stmt->execute() ){
         $_SESSION['user_name'] = $user_name;
         $_SESSION['token'] = substr(md5(rand()), 0, 10);
 
-        // Redirect to your main page
-        header("Location: ./main_page.php");
+        echo json_encode(array(
+            "success" => true,
+            "username" => $user
+        ));
         exit;	
-    }
-    else{
-        // Login failed; redirect back to the login screen
-        $_SESSION['register_error'] = 2;
-        header("Location: ./register_page.php");
+    }else{
+        echo json_encode(array(
+            "success" => false,
+            "message" => "Incorrect Username or Password"
+        ));
         exit;
     }
 }
 else{
-    //register fail, return to register page
-    $_SESSION['register_error'] = 1;
-    header("Location: ./register_page.php");
+    //register fail
+    echo json_encode(array(
+        "success" => false,
+        "message" => "Incorrect Username or Password"
+    ));
     exit;
 }
 
