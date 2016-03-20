@@ -1,9 +1,10 @@
 <?php
 header("Content-Type: application/json"); // 
 
+session_start();
 $user_name = $_POST['username'];
 $user_password = $_POST['password'];
-$user_slated_pw = crypt($user_password);
+$user_slated_pw = crypt($user_password,'st');
 
 require 'database.php';
 		

@@ -1,4 +1,4 @@
-create databse module5;
+create database module5;
 
 CREATE TABLE users(
 	user_id				SMALLINT UNSIGNED	AUTO_INCREMENT,

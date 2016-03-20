@@ -39,12 +39,14 @@ if( $cnt == 1 && crypt($pwd_guess, $pwd_hash)==$pwd_hash){
 		"success" => true,
         "username" => $user
 	));
+	$stmt->close();
     exit;	
 }else{
 	echo json_encode(array(
 		"success" => false,
 		"message" => "Incorrect Username or Password"
 	));
+	$stmt->close();
 	exit;
 }
 

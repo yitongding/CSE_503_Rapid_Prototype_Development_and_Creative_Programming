@@ -10,9 +10,12 @@ if (empty($_SESSION['user_id']) || empty($_SESSION['user_name']) ){
 
     require 'database.php';
 
-    $stmt = $mysqli->prepare("select COUNT(*), from users where user_name = ? and user_id = ?");
+    $stmt = $mysqli->prepare("select COUNT(*) from users where user_name = ? and user_id = ?");
     if(!$stmt){
-        printf("Query Prep Failed: %s\n", $mysqli->error);
+		echo json_encode(array(
+		"success" => false,
+		"message" => "Query Prep Failed: %s\n".$mysqli->error
+	));
         exit;
     }
 
@@ -28,12 +31,13 @@ if (empty($_SESSION['user_id']) || empty($_SESSION['user_name']) ){
     } else {
         $signin_flag = false;
     }
+	$stmt->close();
 }
 
 if ($signin_flag) {
     echo json_encode(array(
 		"success" => true,
-        "username" => $user
+        "username" => $user_name
 	));
     exit;	
 }else{

@@ -38,11 +38,12 @@ function logoutAjax(event){
 
 function register_dialog(){
     $("#register").dialog();
+	$("#new_register_btn").click(registerAjax); //register comfrim button listener
 }
 
 function registerAjax(event){
-    var username = document.getElementById("new_username").value; // Get the username from the form
-	var password = document.getElementById("new_password").value; // Get the password from the form
+    var username = $("#new_username").val(); // Get the username from the form
+	var password = $("#new_password").val(); // Get the password from the form
  
 	// Make a URL-encoded string for passing POST data:
 	var dataString = "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
@@ -57,6 +58,7 @@ function registerAjax(event){
             $("#logout").show();
             updateCalendar();
             alert("You've registered!");
+			$("#register").dialog('close');
 		}else{
 			alert("Register error."+jsonData.message);
 		}
@@ -68,14 +70,26 @@ function registerAjax(event){
 //triger when page is ready
 $(document).ready(function()    
 {
-    $("#login").show();
-    $("#logout").hide();
+	// check the statue of log in
+    var Data = null;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "signin_check_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+		if (Data.success){
+			$("#login").hide();
+			$("#logout").show();
+		} else {
+			$("#login").show();
+			$("#logout").hide();
+		}
+    }, false);
+    xmlHttp.send(null);
 });
 
 document.getElementById("login_btn").addEventListener("click", loginAjax, false); // login_btn listener
 
 $("#register_btn").click(register_dialog); //register_btn listener
-
-$("#new_register_btn").click(registerAjax); //register comfrim button listener
 
 $("#logout_btn").click(logoutAjax); // logout_btn listener
