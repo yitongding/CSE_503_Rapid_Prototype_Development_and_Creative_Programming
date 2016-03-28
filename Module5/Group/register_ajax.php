@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json"); // 
-
+ini_set("session.cookie_httponly", 1);
 session_start();
 $user_name = $_POST['username'];
 $user_password = $_POST['password'];
@@ -39,7 +39,8 @@ if ( $stmt->execute() ){
 
         echo json_encode(array(
             "success" => true,
-            "username" => $user
+            "username" => $user,
+            "token" => $_SESSION['token']
         ));
         exit;	
     }else{

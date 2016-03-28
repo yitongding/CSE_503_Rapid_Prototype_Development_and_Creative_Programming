@@ -15,7 +15,10 @@ function loginAjax(event){
 		if(jsonData.success){
 			$("#login").hide();
             $("#logout").show();
+			$("#icons").show();
+            $("#token").val(jsonData.token);
             updateCalendar();
+            updateShare();
             alert("You've been Logged In!");
 		}else{
 			alert("You were not logged in.  "+jsonData.message);
@@ -31,7 +34,10 @@ function logoutAjax(event){
 	xmlHttp.addEventListener("load", function(){
         $("#login").show();
         updateCalendar();
+        updateShare();
+        $("#token").val("");
         $("#logout").hide();
+		$("#icons").hide();
     },false);
     xmlHttp.send(null); // Send the data
 }
@@ -56,7 +62,10 @@ function registerAjax(event){
 		if(jsonData.success){
 			$("#login").hide();
             $("#logout").show();
+			$("#icons").show();
             updateCalendar();
+            updateShare();
+            $("#token").val(jsonData.token);
             alert("You've registered!");
 			$("#register").dialog('close');
 		}else{
@@ -80,9 +89,12 @@ $(document).ready(function()
 		if (Data.success){
 			$("#login").hide();
 			$("#logout").show();
+			$("#icons").show();
+            $("#token").val(Data.token);
 		} else {
 			$("#login").show();
 			$("#logout").hide();
+			$("#icons").hide();
 		}
     }, false);
     xmlHttp.send(null);

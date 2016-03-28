@@ -2,9 +2,11 @@
 //events_editer_ajax.php
 
 header("Content-Type: application/json");
+ini_set("session.cookie_httponly", 1);
+session_start();
 
 function get_share_user_re($str){
-	user_regex = "/\b([\w]+)(?:;([\w]+))*\b/";
+	$email_regex = "/\b([\w]+)(?:;([\w]+))*\b/";
 	if(preg_match($email_regex, $str, $matches)){
 		return $matches;
 	} else return false;
@@ -36,12 +38,13 @@ $stmt = $mysqli->prepare("select event_user_id from events where event_id = ?");
 if(!$stmt){
 	echo json_encode(array(
 	"success" => false,
-	"message" => "Query Prep Failed: %s\n".$mysqli->error
+	"message" => "Query Prep Failed: %s\n".$mysqli->error,
+    "quiry" => 1
 ));
 	exit;
 }
 
-$stmt->bind_param('i', eid);
+$stmt->bind_param('i', $eid);
 $stmt->execute();
 
 // Bind the results
@@ -56,7 +59,7 @@ if($event_user_id != $user_id ){
 	$stmt->close();
     exit;
 }
-
+$stmt->close();
 
 /**********************************/
 //check if there is share user
@@ -81,6 +84,7 @@ if ($share_array != false){
 		}
 		
 		$share_user_id_ary[$i-1] = $share_user_id;
+        $stmt->close();
 	}
 	
 	//after make sure all users are in the database, insert them
@@ -89,7 +93,7 @@ if ($share_array != false){
 		$stmt = $mysqli->prepare("insert into events (event_user_id, event_title, event_date, event_tag) values (?, ?, ?, ?)");
 		
 		$stmt->bind_param('isss', $share_user_id, $title, $date, $tag);
-		$stmt->execute()
+		$stmt->execute();
 	}
 }
 
@@ -100,7 +104,8 @@ $stmt = $mysqli->prepare("update events set event_title = ?, event_date = ?, eve
 if(!$stmt){
     echo json_encode(array(
         "success" => false,
-        "message" => printf("Query Prep Failed: %s\n", $mysqli->error);
+        "message" => printf("Query Prep Failed: %s\n", $mysqli->error),
+        "quiry" => 3
     ));
     exit;
 }

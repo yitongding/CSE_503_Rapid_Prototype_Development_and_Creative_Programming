@@ -19,6 +19,7 @@ div#main{
 #register, #new_event, #calender_share, #event_edit{
     display: none;
 }
+form input, form select{margin-bottom:12px; width:95%; padding: .4em;}
 
 /*functional button css*/
 #prev_month_btn { float: left; }
@@ -27,19 +28,21 @@ div#main{
 /*calender css*/
 #date_ind { list-style-type: none; margin: 0; padding: 0; width: 750px; height: 650px;}
 #day_ind  { list-style-type: none; margin: 0; padding: 0; width: 750px; height: 10px;}
-#date_ind li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 2em; text-align: center; }
+#date_ind li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; text-align: center; }
 #day_ind li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 25px; font-size: 2em; text-align: center; }
-#calender_title { font-size: 3em; text-align: center}
+#calender_title { font-size: 3em; text-align: center;}
+#date_ind li a.event_brf {font-size: 1em; text-align: center;}
 </style>
-<!--
+
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
--->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+
+<!--
 <link rel="stylesheet" href="jquery-ui.css">
 <script src="jquery.min.js"></script>
 <script src="jquery-ui.min.js"></script>
-    
+-->
 </head>
 <body><div id="main">
 
@@ -48,7 +51,8 @@ div#main{
     <input type="text" id="username" placeholder="Username" />
     <input type="password" id="password" placeholder="Password" />
     <button id="login_btn">Log In</button>
-    <button id="register_btn">Register</button>    
+    <button id="register_btn">Register</button>
+    <input type="hidden" id="token" value="">    
 </div>
 
 <!-- logout part code -->    
@@ -70,13 +74,14 @@ div#main{
         <option>MySelf</option>
     </select>
     <button id="share_calender_btn">Share Calender</button>
+	<button id="new_event_create_btn">New Event</button>
 </div>
 
 <script type="text/javascript" src="log.js"></script> <!-- load the JavaScript file -->
 
 <button id="prev_month_btn">Previous Month</button>
 <button id="next_month_btn">Next Month</button>
-<script type="text/javascript" src="calender.js"></script> <!-- load the JavaScript file -->
+
 
 <!-- begin of the calender -->
 <div id="calender">
@@ -95,11 +100,17 @@ div#main{
         
     </ul>    
 </div>
+</div>
 
+<div class="dialog">
 <!--dialog for create new event -->
 <div id="new_event" title="new event page">
-    <input type="text" name="new_event_title" id="new_event_title" size="50" maxlength="100" placeholder="Event Title" required>
+    <form>
+    <label for="new_event_title">Title</label>
+    <input type="text" name="new_event_title" id="new_event_title" class="text ui-widget-content ui-corner-all" size="50" maxlength="100" placeholder="Event Title" required>
+    <label for="new_event_date">Date</label>
     <input type="date" name="new_event_date" id="new_event_date" required>
+    <label for="new_event_tag">Tag</label>
     <select name="new_event_tag" id="new_event_tag">
         <option>none</option>
         <option>tag1</option>
@@ -108,14 +119,20 @@ div#main{
         <option>tag4</option>
         <option>tag5</option>
     </select>
+    <label for="new_event_share">Share with</label>
     <input type="text" name="new_event_share" id="new_event_share" placeholder="Share with Someone">
-    <button id="new_event_btn">Submit</button> 
+    <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </form>
 </div>
+
+
 
 <!-- dialog for share calender -->
 <div id="calender_share" title="share calender">
-    <input type="text" name="new_calender_share" id="new_calender_share" placeholder="Share with Someone">
-    <button id="new_calender_share_btn">Share</button>
+	<form>
+		<input type="text" name="new_calender_share" id="new_calender_share" placeholder="Share with Someone">
+		<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+	</form>
 </div>
 
 <!-- new regsiter code, this is a jQ dialog -->
@@ -127,9 +144,13 @@ div#main{
 
 <!-- event detail and edit dialog -->
 <div id="event_edit" title="event edit page">
+    <form>
+	<label for="edit_event_title">Title</label>
     <input type="text" name="edit_event_title" id="edit_event_title" size="50" maxlength="100" required>
-    <input type="date" name="edit_event_date" id="edit_event_date" required>
-    <select name="edit_event_tag" id="edit_event_tag">
+    <label for="edit_event_date">Date</label>
+	<input type="date" name="edit_event_date" id="edit_event_date" required>
+    <label for="new_event_tag">Tag</label>
+	<select name="edit_event_tag" id="edit_event_tag">
         <option>none</option>
         <option>tag1</option>
         <option>tag2</option>
@@ -137,11 +158,16 @@ div#main{
         <option>tag4</option>
         <option>tag5</option>
     </select>
-    <input type="text" name="edit_event_share" id="edit_event_share" placeholder="Share with Someone New">
+    <label for="new_event_share">Share with</label>
+	<input type="text" name="edit_event_share" id="edit_event_share" placeholder="Share with Someone New">
     <input type="hidden" name="edit_event_id" id="edit_event_id">
-    <button id="edit_event_btn">Submit</button> 
-    <button id="delete_event_btn">Delete</button> 
+    <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </form>
+    
 </div>
 
-</div></body>
+</div>
+<script type="text/javascript" src="calender.js"></script> <!-- load the JavaScript file -->
+
+</body>
 </html>

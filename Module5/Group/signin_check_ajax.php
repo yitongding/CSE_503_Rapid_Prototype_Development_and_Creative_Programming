@@ -1,5 +1,6 @@
 <?php
 header("Content-Type: application/json"); // 
+ini_set("session.cookie_httponly", 1);
 session_start();
 
 if (empty($_SESSION['user_id']) || empty($_SESSION['user_name']) ){
@@ -37,7 +38,8 @@ if (empty($_SESSION['user_id']) || empty($_SESSION['user_name']) ){
 if ($signin_flag) {
     echo json_encode(array(
 		"success" => true,
-        "username" => $user_name
+        "username" => $user_name,
+        "token" => $_SESSION['token']
 	));
     exit;	
 }else{

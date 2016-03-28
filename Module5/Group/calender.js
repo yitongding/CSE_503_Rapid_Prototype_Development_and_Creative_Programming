@@ -28,7 +28,26 @@ $("#prev_month_btn").click(function(event){
 });
 
 
-
+// update share user
+function updateShare(){
+	var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "share_update_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+		var jsonData = JSON.parse(event.target.responseText);
+		var signin_flag = jsonData[0].signin;
+		var share_name_array = jsonData[0].share_name_array;
+		if (signin_flag) {
+			$("#show_event_user").html("<option>MySelf</option>");
+			for (n in share_name_array) {
+				if (n != 0){
+					$("#show_event_user").append("<option>"+share_name_array[n]+"</option>");
+				}
+			}
+		}
+	});
+	xmlHttp.send(null);
+}
 
 
 // updeate calender when month change
@@ -37,40 +56,55 @@ function updateCalendar(){
     $("#calender_title").html(monthNames[currentMonth.month]+"&nbsp;"+currentMonth.year);
     $("#date_ind").html(" "); //print the title month
 	
-    //if (signin_flag ) {
-    //   jsonData = event_request(currentMonth.year, currentMonth.month); //request event data from server
-    //}
+	var share_user_selected = $( "#show_event_user option:selected" ).text();
 	var year = currentMonth.year;
 	var month = currentMonth.month;
-	var dataString = "year=" + encodeURIComponent(year) + "&month=" + encodeURIComponent(month);
+	var dataString = "year=" + encodeURIComponent(year) + "&month=" + encodeURIComponent(month) + "&show_user_name=" + encodeURIComponent(share_user_selected);
     
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", "events_provider_ajax.php", true);
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttp.addEventListener("load",function(event){
         var jsonData = JSON.parse(event.target.responseText);
-		var signin_flag = jsonData[0].signin;
+		var signin_flag = jsonData[0].signin;	//sign in flag, true if signed in
+        var start_flag = false;
+		var valid_share_flag = jsonData[0].valid_share;
+		if (signin_flag & !valid_share_flag) {
+			alert("You are not shared with this user.");
+			signin_flag = false;
+		}
+		
+		var tag_selected = $( "#show_event_tag option:selected" ).text();
 		for(var w in weeks){
 			var days = weeks[w].getDates();
 			for(var d in days){
-				$("#date_ind").append('<li class="ui-state-default">'+days[d].getDate()+'<br>'); //add a day
-				if (signin_flag) {
+				if (days[d].getDate() == 1){
+					start_flag = !start_flag;
+				}
+				if (start_flag){
+					$("#date_ind").append('<li class="ui-state-default" id="day'+days[d].getDate()+'">'+days[d].getDate()+'<br>');
+				} else {
+					$("#date_ind").append('<li class="ui-state-default" id="non-day'+days[d].getDate()+'">'+days[d].getDate()+'<br>');
+				}
+							
+				if (signin_flag & start_flag) {	//if signed in, show the events in the DB
 					for (e in jsonData){
-						if (jsonData[e].date == days[d].getDate() && jsonData[e].owner == "#show_event_user".val() ){ //if day and user match
-							$("#date_ind").append(jsonData[e].time + '<a id="' + jsonData[e].eid + '" class="event_brf">' + jsonData[e].title + '</a>');
+                        var day_getDate = days[d].toISOString().slice(0, 10);
+						//if (jsonData[e].date == $day_getDate && jsonData[e].owner == $("#show_event_user option:selected").text()){ //if day and user match
+                        if (jsonData[e].date == day_getDate & (jsonData[e].tag == tag_selected | tag_selected == "All")){ //if day match
+							$("#day"+days[d].getDate()).append('<p id="' + jsonData[e].eid + '" class="event_brf">' + jsonData[e].title + '</p>');
+							var event_id = "#" + jsonData[e].eid;	// get the id of the event tag
+							$(event_id).on('click', function(ev){	// add event listener to the event
+								show_event_detail(ev);
+							});
 						}
 					}
 				}
 				$("#date_ind").append('</li>');
 			}
 		}
-		if (typeof signin_flag[1] != 'undefined'){
-			$(".event_brf").click(show_event_detail(event)); //add event listener for each event link
-		}
     }, false);
     xmlHttp.send(dataString);
-    
-	
 }
 
 // ask events for certain month, tag and user from the server, return json type data
@@ -108,22 +142,57 @@ function event_request_id(event_id){
 // show even detail dialog
 function show_event_detail(event){
     var eid = event.target.id;
-    jsonData = event_request_id(eid);
-    $("#edit_event_title").val(jsonData.event.title);
-    $("#edit_event_date").val(jsonData.event.date);
-    $("#edit_event_tag").val(jsonData.event.tag);
-    $("#edit_event_id").val(eid);
-    $("#event_edit").dialog();
+    var dataString = "event_id=" + encodeURIComponent(eid);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "events_provider_id_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        var jsonData = JSON.parse(event.target.responseText);
+        $("#edit_event_title").val(jsonData.title);
+        $("#edit_event_date").val(jsonData.date);
+        $("#edit_event_tag").val(jsonData.tag);
+        $("#edit_event_id").val(eid);
+        var edit_event_dialog, edit_event_form;
+        edit_event_dialog = $("#event_edit").dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: false,
+            buttons: {
+                "Edit event": edit_event_upload,
+                "Delete event": delete_event_upload,
+                Cancel: function() {
+                    edit_event_dialog.dialog( "close" );
+                }
+            },
+            close: function() {
+                edit_event_form[ 0 ].reset();
+                //allFields.removeClass( "ui-state-error" );
+            }
+        });
+
+        edit_event_form = edit_event_dialog.find("form").on("submit", function(event){
+            event.preventDefault();
+            edit_event_upload();
+        });
+        
+        edit_event_dialog.dialog("open");
+        // event create, edit, delete button listener
+        //$("#edit_event_btn").click(edit_event_upload);
+        //$("#delete_event_btn").click(delete_event_upload);
+    }, false);
+    xmlHttp.send(dataString);
 }
 
 // event create uploader
 function create_event_upload(){
     var title = $("#new_event_title").val();
     var date = $("#new_event_date").val();
-    var tag = $("new_event_tag").val();
+	var tag = $( "#new_event_tag option:selected" ).text();
     var share = $("#new_event_share").val();
+    var token = $("#token").val();
     
-    var dataString = "title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date) + "&tag=" + encodeURIComponent(tag) + "&share=" + encodeURIComponent(share);
+    var dataString = "title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date) + "&tag=" + encodeURIComponent(tag) + "&share=" + encodeURIComponent(share) + "&token=" + encodeURIComponent(token);
     var Data = null;
     
     var xmlHttp = new XMLHttpRequest();
@@ -131,44 +200,49 @@ function create_event_upload(){
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttp.addEventListener("load",function(event){
         Data = JSON.parse(event.target.responseText);
+		if (Data.success) {
+			$("#new_event").dialog("close");
+            updateCalendar();
+			alert("Event create success.");  
+		} else {
+			alert("Event create fail.");
+		}
     }, false);
     xmlHttp.send(dataString);
-    if (Data.success) {
-        alert("Event create success.");
-    } else {
-        alert("Event create fail.");
-    }
 }
 
 // event edit uploader
 function edit_event_upload(){
     var title = $("#edit_event_title").val();
     var date = $("#edit_event_date").val();
-    var tag = $("edit_event_tag").val();
+    var tag =$( "#edit_event_tag option:selected" ).text();
     var share = $("#edit_event_share").val();
     var eid = $("#edit_event_id").val();
+    var token = $("#token").val();
     
-    var dataString = "title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date) + "&tag=" + encodeURIComponent(tag) + "&share=" + encodeURIComponent(share) + "&eid=" + encodeURIComponent(eid);
-    var Data = null;
+    var dataString = "title=" + encodeURIComponent(title) + "&date=" + encodeURIComponent(date) + "&tag=" + encodeURIComponent(tag) + "&share=" + encodeURIComponent(share) + "&eid=" + encodeURIComponent(eid)+"&token=" + encodeURIComponent(token);
     
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", "events_editer_ajax.php", true);
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlHttp.addEventListener("load",function(event){
-        Data = JSON.parse(event.target.responseText);
+    xmlHttp.addEventListener("load",function(){
+        var Data = JSON.parse(event.target.responseText);
+        if (Data.success) {
+            $("#event_edit").dialog("close");
+            updateCalendar();
+			alert("Event edit success.");
+        } else {
+            alert("Event edit fail.");
+        }
     }, false);
     xmlHttp.send(dataString);
-    if (Data.success) {
-        alert("Event edit success.");
-    } else {
-        alert("Event edit fail.");
-    }
 }
 
 // event delete uploader
 function delete_event_upload(){
     var eid = $("#edit_event_id").val();
-    var dataString = "eid=" + encodeURIComponent(eid);
+    var token = $("#token").val();
+    var dataString = "eid=" + encodeURIComponent(eid)+"&token=" + encodeURIComponent(token);
     var Data = null;
     
     var xmlHttp = new XMLHttpRequest();
@@ -176,43 +250,108 @@ function delete_event_upload(){
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttp.addEventListener("load",function(event){
         Data = JSON.parse(event.target.responseText);
+		if (Data.success) {
+			$("#event_edit").dialog('close');
+			updateCalendar();
+			alert("Event delete success.");
+		} else {
+			alert("Event delete fail.");
+		}
     }, false);
     xmlHttp.send(dataString);
-    if (Data.success) {
-        alert("Event delete success.");
-    } else {
-        alert("Event delete fail.");
-    }
+}
+
+// calender share uploader
+function share_calender_upload(){
+	var share_name = $("#new_calender_share").val();
+    var token = $("#token").val();
+	var dataString = "share=" + encodeURIComponent(share_name)+"&token=" + encodeURIComponent(token);
+	var Data = null;
+    
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "calender_share_ajax.php", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.addEventListener("load",function(event){
+        Data = JSON.parse(event.target.responseText);
+		if (Data.success) {
+			alert("Calender share success.");
+			$("#calender_share").dialog('close');
+			updateCalendar();
+			updateShare();
+		} else {
+			alert("Calender share fail."+ Data.message);
+		}
+    }, false);
+    xmlHttp.send(dataString);
 }
 
 // initial calender when page is ready
-$(document).ready(updateCalendar);
+$(document).ready(function(){
+	updateShare();
+	updateCalendar();
+});
 
 // tag selection listener
 $("#show_event_tag").change(updateCalendar);
 
+// share calender show listener
+$("#show_event_user").change(updateCalendar);
+
 // new calender share listener
-$("#share_calender_btn").click(function(event){
-    $("#calender_share").dialog();
+var share_calender_dialog, share_calender_form;
+share_calender_dialog = $("#calender_share").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 350,
+    modal: false,
+    buttons: {
+        "Share": share_calender_upload,
+        Cancel: function() {
+            share_calender_dialog.dialog( "close" );
+        }
+    },
+    close: function() {
+        share_calender_form[ 0 ].reset();
+        //allFields.removeClass( "ui-state-error" );
+    }
 });
 
-// event create, edit, delete button listener
-$("#new_event_btn").click(create_event_upload);
-$("#edit_event_btn").click(edit_event_upload);
-$("#delete_event_btn").click(delete_event_upload);
+share_calender_form = share_calender_dialog.find("form").on("submit", function(event){
+    event.preventDefault();
+    share_calender_upload();
+});
+
+$("#share_calender_btn").button().click(function(){
+	share_calender_dialog.dialog("open");
+});
+/*****************************/
 
 
-
-// update calender when tag selection change 
-/*
-function showtag(){
-    var tag_value = $("#show_event_tag").val();
-    var jsondata = event_request();
-    for (d in jsondata){
-        var event = jsondata.event[d];
-        if(event.tag == tag_value){
-            showevent(event);
+// new event dialog
+var new_event_dialog, new_event_form;
+new_event_dialog = $("#new_event").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 350,
+    modal: false,
+    buttons: {
+        "Create an event": create_event_upload,
+        Cancel: function() {
+            new_event_dialog.dialog( "close" );
         }
+    },
+    close: function() {
+        new_event_form[ 0 ].reset();
+        //allFields.removeClass( "ui-state-error" );
     }
-}
-*/
+});
+
+new_event_form = new_event_dialog.find("form").on("submit", function(event){
+    event.preventDefault();
+    create_event_upload();
+});
+
+$("#new_event_create_btn").button().click(function(){
+	new_event_dialog.dialog("open");
+});
+/*****************************/

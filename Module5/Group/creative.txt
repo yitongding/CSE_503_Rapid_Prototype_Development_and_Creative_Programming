@@ -1,0 +1,8 @@
+http://ec2-54-200-82-237.us-west-2.compute.amazonaws.com/~Yitong/calender.html
+
+user: user1, user2, user3    pw: 920820
+
+
+Users can tag an event with a particular category and enable/disable those tags in the calendar view. (5 points)
+Users can share their calendar with additional users. (5 points)
+Users can create group events that display on multiple users calendars (5 points)

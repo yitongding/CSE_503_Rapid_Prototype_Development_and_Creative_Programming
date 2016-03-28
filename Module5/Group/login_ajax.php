@@ -1,7 +1,8 @@
 <?php
 // login_ajax.php
  
-header("Content-Type: application/json"); // Since we are sending a JSON response here (not an HTML document), set the MIME Type to application/json
+header("Content-Type: application/json"); 
+ini_set("session.cookie_httponly", 1);// Since we are sending a JSON response here (not an HTML document), set the MIME Type to application/json
 
 require 'database.php';
 
@@ -37,7 +38,8 @@ if( $cnt == 1 && crypt($pwd_guess, $pwd_hash)==$pwd_hash){
 
     echo json_encode(array(
 		"success" => true,
-        "username" => $user
+        "username" => $user,
+        "token" => $_SESSION['token']
 	));
 	$stmt->close();
     exit;	

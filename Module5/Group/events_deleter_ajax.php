@@ -2,6 +2,8 @@
 //events_deleter_ajax.php
 
 header("Content-Type: application/json");
+ini_set("session.cookie_httponly", 1);
+session_start();
 
 $eid = $_POST['eid'];
 $token = $_POST['token'];
@@ -29,7 +31,7 @@ if(!$stmt){
 	exit;
 }
 
-$stmt->bind_param('i', eid);
+$stmt->bind_param('i', $eid);
 $stmt->execute();
 
 // Bind the results
@@ -41,17 +43,18 @@ if($event_user_id != $user_id ){
         "success" => false,
         "message" => "user id mismatch."
     ));
+	$stmt->close();
     exit;
 }
-
+$stmt->close();
 /**********************************/
 //update the event
 /**********************************/
-$stmt = $mysqli->prepare("delete from comments where comment_id=?");
+$stmt = $mysqli->prepare("delete from events where event_id=?");
 if(!$stmt){
     echo json_encode(array(
         "success" => false,
-        "message" => printf("Query Prep Failed: %s\n", $mysqli->error);
+        "message" => printf("Query Prep Failed: %s\n", $mysqli->error)
     ));
     exit;
 }
