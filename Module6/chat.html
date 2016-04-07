@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Chat</title>
+    <style type="text/css">
+        .chat .room{
+            display: none;
+        }
+    </style>
+    <!--<link rel="stylesheet" href="http://ec2-54-200-82-237.us-west-2.compute.amazonaws.com/~Yitong/style.css">-->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+
+
+</head>
+<body>
+    <ul class="pages">
+        <li class="chat page">
+			<div class="roomMember">
+                <h2>Member List</h2>
+                <button class="returnToRoomList">Leave Room</button>
+				<ul class="memberList"></ul>
+			</div>
+            <div class="chatArea">
+                <h2>Chating Message</h2>
+                <ul class="messages"></ul>
+            </div>
+            <input class="privateUsername" type="text" placeholder="To Someone" maxlength="14" />
+            <input class="inputMessage" placeholder="Type here..."/>
+            <button class="messageSubmit">Send</button>
+        </li>
+        <li class="login page">
+            <div class="form">
+                <h3 class="title">What's your nickname?</h3>
+                
+                <input class="usernameInput" type="text" maxlength="14" />
+                <button class="usernameSubmit">Send</button>
+            </div>
+        </li>
+		<li class="room page">
+			<input class="newRoomNameInput" type="text" maxlength="50" placeholder="Name of New Room"/>
+			<input class="newRoomPasswordInput" type="text" maxlength="50" placeholder="Password of New Room" />
+			<button class="createNewRoom">Create New Room</button>
+            <button class="roomListRefresh">Refresh</button>
+			<ul class="roomList"></ul>
+		</li>
+		<li class="password page">
+			<input class="roomPassword" type="text" maxlength="50" placeholder="Password of The Room" />
+			<button class="passwordSubmit">Submit</button>
+			<button class="passwordCancel">Cancel</button>
+		</li>
+    </ul>
+
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://ec2-54-200-82-237.us-west-2.compute.amazonaws.com/~Yitong/chat_client.js"></script>
+</body>
+</html>
+        
