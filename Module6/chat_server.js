@@ -13,6 +13,7 @@ var roomList = [];
 var roomHost = {};
 var roomMember = {};
 var banList = {};
+var muteList = {};
 var roomPassword = {};
 	
 var app = http.createServer(function(req, resp){
@@ -36,10 +37,13 @@ io.sockets.on("connection", function(socket){
 		console.log("user: "+socket.username+ " message: "+data); // log it to the Node.JS output
         // We tell the client to execute 'new message'
         var room = socket.currentRoom;
-        io.to(room).emit('new message', {
-            username: socket.username,
-            message: data
-        });
+        // Check mute list
+        if (muteList[room].indexOf(socket.username) == -1) {
+            io.to(room).emit('new message', {
+                username: socket.username,
+                message: data
+            });
+        }
     });
 	
     // Private message handler
@@ -153,6 +157,8 @@ io.sockets.on("connection", function(socket){
         roomMember[roomName] = [socket.username];
         // Add ban list of room
         banList[roomName] = [];
+        // Add mute list of room
+        muteList[roomName] = [];
 		// Add password to array
 		roomPassword[roomName] = password;
         // Send member list to members
@@ -197,6 +203,9 @@ io.sockets.on("connection", function(socket){
         if (memberArray.length < 1) {
             delete roomMember[room];
 			delete roomPassword[room];
+            delete banList[room];
+            delete muteList[room];
+            delete roomHost[room];
             roomList.remove(room);
             return true;
         }
@@ -223,21 +232,59 @@ io.sockets.on("connection", function(socket){
 		io.emit('room list', {room:roomList});
     }
     
+    socket.on('mute member', function(username) {
+        var roomName = socket.currentRoom;
+        if (roomMember[roomName].indexOf(username) != -1){
+            muteList[roomName].push(username);
+			var userId = nameToId[username];
+            io.sockets.sockets[userId].emit('get muted');
+        }
+    });
+    
     socket.on('kick member', function(username) {
-        var roomName = socket.currentRoom
-        if (roomMember[roomName].indexOf(username) != -1) {
+        var roomName = socket.currentRoom;
+        if (roomMember[roomName].indexOf(username) != -1){
             forceLeaveRoom(roomName, username);
         }
     });
     
     socket.on('ban member', function(username) {
-        var roomName = socket.currentRoom
-        if (roomMember[roomName].indexOf(username) != -1) {
+        var roomName = socket.currentRoom;
+        if (roomMember[roomName].indexOf(username) != -1){
             forceLeaveRoom(roomName, username);
             banList[roomName].push(username);
         }
     });
 	
+    socket.on('close room', function(){
+        var roomName = socket.currentRoom;
+        var memberArray = roomMember[roomName];
+        for (var userInd = 0; userInd < memberArray.length; userInd++) {
+            var username = memberArray[userInd];
+			var userId = nameToId[username];
+            console.log("user "+username+" removed from room "+roomName);
+            // Leave the room
+            io.sockets.sockets[userId].leave(roomName);
+            
+            // Remove user from member list
+            roomMember[roomName].remove(username);
+            
+            io.sockets.sockets[userId].emit('close room');
+        
+            io.sockets.sockets[userId].currentRoom = '';
+        }
+        
+        delete roomMember[roomName];
+	    delete roomPassword[roomName];
+        delete banList[roomName];
+        delete muteList[roomName];
+        delete roomHost[roomName];
+        roomList.remove(roomName);
+        
+		// Get room list
+		io.emit('room list', {room:roomList});
+    });
+    
 	socket.on('submit password', function(roomName, passwordInput) {
 		if(roomPassword[roomName] == passwordInput) {
 			socket.join(roomName);

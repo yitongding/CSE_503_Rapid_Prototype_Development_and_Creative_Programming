@@ -1,3 +1,4 @@
+http://ec2-54-200-82-237.us-west-2.compute.amazonaws.com:8000/
+
 1. host can close the room
-2. user can see how many member are ther in each room from the room list
-3. 
+2. host can mute room member by click button

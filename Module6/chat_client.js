@@ -161,6 +161,9 @@ $(function() {
             for (memberIdx in data.member) {
                 var $memberBodyDiv = $('<span class="memberBody">')
                     .text(data.member[memberIdx]);
+                var $muteButton = $('<button class="muteButton">')
+                    .attr("id",data.member[memberIdx])
+                    .text("Mute");
                 var $kickButton = $('<button class="kickButton">')
                     .attr("id",data.member[memberIdx])
                     .text("Kick");
@@ -169,10 +172,14 @@ $(function() {
                     .text("Ban");
                 var $memberDiv = $('<li class="member"/>')
                     .append($memberBodyDiv)
+                    .append($muteButton)
                     .append($kickButton)
                     .append($banButton);
                 $('.memberList').append($memberDiv);
             }
+            var $closeButton = $('<button class="closeButton">')
+            .text("Close the room");
+            $('.memberList').append($closeButton);
         }
     }
     
@@ -222,6 +229,14 @@ $(function() {
     
     function banMember(userId){
         socket.emit('ban member', userId);
+    }
+    
+    function muteMember(userId){
+        socket.emit('mute member', userId);
+    }
+    
+    function closeRoom(){
+        socket.emit('close room');
     }
     
 	function passwordSubmit(){
@@ -286,6 +301,14 @@ $(function() {
          banMember(e.target.id);
     });
     
+    $('.memberList').on('click','li > .muteButton',function(e){
+         muteMember(e.target.id);
+    });
+    
+    $('.memberList').on('click','.closeButton',function(e){
+         closeRoom();
+    });
+    
     // Listen to the new message from server
 	socket.on('new message', function (data) {
         addChatMessage(data);
@@ -309,6 +332,10 @@ $(function() {
 	socket.on('member left', function(data){
 		leftRoomMember(data);
 	});
+    
+    socket.on('get muted', function(){
+        alert("You are muted by the host.");
+    });
     
     socket.on('get kicked',function() {
         $roomPage.show();
@@ -336,6 +363,12 @@ $(function() {
 	socket.on('password wrong', function() {
 		alert("Password incorrect.");
 	});
+    
+    socket.on('close room', function(){
+        alert("Host closed the room.");
+        $chatPage.hide();
+        $roomPage.show();
+    });
 	
 });
 
