@@ -1,0 +1,26 @@
+<br>
+<div class="loginDiv">
+	<input type="text" placeholder="Username" maxlength="20">
+	<input type="password" placeholder="Password" maxlength="20">
+	<button class="loginSubmit">Submit</button>
+	<button class="regesterSubmit">Regester</button>
+</div>
+<br>
+
+Search: <input ng-model="query">
+<table st-table="rowCollection" class="table table-striped">
+	<tr>
+		<th>Details:</th>
+		<th>Vote Name:</th>
+		<th>Initiator:</th>
+		<th>Vote Counts:</th>
+	</tr>
+	<tr ng-repeat="vote in voteList | filter:query">
+		<td><a href="#/detail/{{vote.id}}">Review</a></td>
+		<td>{{vote.brand}}</td>
+		<td>{{vote.name}}</td>
+		<td>{{vote.country}}</td>
+	</tr>
+</table>
+
+

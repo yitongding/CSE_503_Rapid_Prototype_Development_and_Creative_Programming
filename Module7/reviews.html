@@ -1,0 +1,28 @@
+<br>
+<p>Reviews for {{coffee.brand}} {{coffee.name}}:</p>
+<table st-table="rowCollection" class="table table-striped">
+	<tr>
+		<th>Reviewer:</th>
+		<th>Comment:</th>
+		<th>Rating:</th>
+	</tr>
+	<tr ng-repeat="rev in coffee.reviews">
+		<td>{{rev.reviewer}}</td>
+		<td>{{rev.comment}}</td>
+		<td>{{rev.rating}}<uib-rating ng-model="rev.rating" max="max" read-only="true"></uib-rating></td>
+	</tr>
+	
+</table>
+
+
+<div style="height: 305px">
+    <uib-carousel active="active">
+		<uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+			<img ng-src="{{slide.image}}" style="margin:auto;">
+			<div class="carousel-caption">
+				<h4>Slide {{slide.id}}</h4>
+				<p>{{slide.text}}</p>
+			</div>
+		</uib-slide>
+    </uib-carousel>
+</div>

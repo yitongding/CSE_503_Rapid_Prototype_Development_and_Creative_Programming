@@ -1,0 +1,30 @@
+<br>
+<h1>Vote for {{vote.name}}</h1>
+<p>Initiator: {{vote.host}}</p>
+<table st-table="rowCollection" class="table table-striped">
+	<tr>
+		<th>Option:</th>
+		<th>Vote Count:</th>
+		<th>Percentage:</th>
+		<th>Vote for:</th>
+	</tr>
+	<tr ng-repeat="option in vote.options">
+		<td>{{option.name}}</td>
+		<td>{{option.count}}</td>
+		<td>{{option.percentage}}</td>
+		<td><button class="voteButton" id="{{option.id}}">Vote for it!</button></td>
+	</tr>
+</table>
+
+<div class="newComment">
+	<input type="text" maxlength="140" placeholder="new comment">
+	<button class="newCommentSubmit">Submit</button>
+</div>
+
+<div class="commentList" ng-repeat="comment in vote.comment">
+	<div class="commentBody" id="{{comment.id}}">
+		<p class="commentUser">{{comment.user}}: </p>
+		<p class="commentMessage">{{comment.message}}</p>
+		<br>
+	</div>
+</div>

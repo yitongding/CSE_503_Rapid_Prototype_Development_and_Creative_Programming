@@ -1,0 +1,29 @@
+<br>
+Search: <input ng-model="query">
+<table st-table="rowCollection" class="table table-striped">
+	<tr>
+		<th>Reviews:</th>
+		<th>Brand:</th>
+		<th>Coffee Title:</th>
+		<th>Country</th>
+	</tr>
+	<tr ng-repeat="coff in coffees | filter:query">
+		<td><a href="#/reviews/{{coff.id}}">Review</a></td>
+		<td>{{coff.brand}}</td>
+		<td>{{coff.name}}</td>
+		<td>{{coff.country}}</td>
+	</tr>
+</table>
+
+<div style="height: 305px">
+    <uib-carousel active="active">
+		<uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+			<img ng-src="{{slide.image}}" style="margin:auto;">
+			<div class="carousel-caption">
+				<h4>Slide {{slide.id}}</h4>
+				<p>{{slide.text}}</p>
+			</div>
+		</uib-slide>
+    </uib-carousel>
+</div>
+
