@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="voteApp">
+<head>
+    <meta charset="utf-8">
+    <title>Detail</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
+</head>
+
+<body>
+<a href="./vote.html">Return to vote list</a>
+<div class="login_dis" id=""></div>
+
+<br>
+
+<div class="title_dis"></div>
+<div class="host_name_dis"></div>
+<div class="end_btn_div"> 
+	<button class="end_btn">End vote as host</button>
+</div>
+<input type="text" class="share_link" readonly>
+
+<br>
+Vote anonymously: <input class="anonymousCheck" type="checkbox" name="anonymous" >
+<table st-table="rowCollection" id="optionList" class="table table-striped">
+	<tr>
+		<th>Option:</th>
+		<th>Vote Count:</th>
+		<th>Percentage:</th>
+		<th>Vote for:</th>
+	</tr>
+</table>
+
+<br>
+<br>
+
+<div class="newComment">
+	<input class="newCommentMessage" type="text" maxlength="140" placeholder="new comment">
+	<button class="newCommentSubmit">Submit</button>
+</div>
+
+<ul class="commentList">
+</ul>
+
+<script type="text/javascript" src="detail.js"></script>
+</body>
+</html>
+

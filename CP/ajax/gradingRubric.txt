@@ -1,0 +1,31 @@
+Rubric Completed on Time (5 points)
+
+MongoDB Database (40 Points)
+    MongoDB is correctly installed and running on the instance (5 Points)
+    User can register and log in (7 points)
+    Multiple databases made for their specific use (users, votes, etc.) (4 points)
+    Users can log into the site, and they cannot manipulate votes host by other users (8 points)
+    Comments can be added and deleted and are stored in the database (only by valid users) (10 points)
+    Anonymous posters cannot modify any results (4 Points)
+    Voter can share the link of voting to others (2 points)
+    
+Voting (25 points)
+    User can see any vote result (5 points)
+    User can create a vote with arbitrary name and options (10 points)
+    Vote initiator can terminate vote manually (5 points)
+    Voter can vote anonymously (5 points)
+
+Display (10 Points)
+    The results are listed in a table displaying relevant information (5 points)
+    Users can click on a specific link to see the detail of the vote (5 points)  
+
+Best Practices (5 Points):
+    Code is well formatted and easy to read, with proper commenting (2 points)
+    Passwords are stored salted and encrypted (2 points)
+    Page passes the W3C validator (1 points)
+
+Usability (5 Points):
+    Site is intuitive to use and navigate (4 points)
+    Site is visually appealing (1 point)
+
+Creative Portion (10 Points)

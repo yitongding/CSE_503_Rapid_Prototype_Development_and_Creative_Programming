@@ -2,19 +2,23 @@
 header("Content-Type: application/json"); // 
 ini_set("session.cookie_httponly", 1);
 session_start();
-$user_name = $_POST['username'];
-$user_password = $_POST['password'];
-$user_slated_pw = crypt($user_password,'st');
 
-require 'database.php';
-		
-$stmt = $mysqli->prepare("insert into users (user_name, user_slated_pw) values (?, ?)");
-if(!$stmt){
-    printf("Query Prep Failed: %s\n", $mysqli->error);
-    exit;
-}
-    
-$stmt->bind_param('ss', $user_name, $user_slated_pw);
+$mongo = new MongoClient();
+$db = $mongo->vote;
+$userdb = $db->users;
+
+$username = $_POST['username'];
+$password = $_POST['password'];
+$hash
+
+$dbInput=array(
+	"username" => $username,
+	
+);
+
+$userdb->insert($dbInput);
+
+
     
 if ( $stmt->execute() ){
     //if insert success, query user id from database

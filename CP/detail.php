@@ -16,9 +16,47 @@
 	<script src="dbControl.js"></script>
 	<script src="app.js"></script>
 </head>
+
 <body>
-	<a href="#/list" class='btn btn-default'>Back To Home</a>
-    <div ng-view></div>
+
+<br>
+<h1>Vote for <?php echo $vote_name?></h1>
+<p>Initiator: <?php echo $vote_host?></p>
+<table st-table="rowCollection" class="table table-striped">
+	<tr>
+		<th>Option:</th>
+		<th>Vote Count:</th>
+		<th>Percentage:</th>
+		<th>Vote for:</th>
+	</tr>
+	<?php while(false) : ?>
+	<tr>
+		<td><?php echo $option_name?></td>
+		<td><?php echo $option_count?></td>
+		<td><?php echo $option_percen?></td>
+		<td>
+			<form action="./votefor.php">
+				<button class="voteButton" id="{{option.id}}">Vote for it!</button>
+			</form>
+		</td>
+	</tr>
+	<?php endwhile ?>
+</table>
+
+<div class="newComment">
+	<input type="text" maxlength="140" placeholder="new comment">
+	<button class="newCommentSubmit">Submit</button>
+</div>
+
+<div class="commentList" ng-repeat="comment in vote.comment">
+	<div class="commentBody" id="{{comment.id}}">
+		<p class="commentUser">{{comment.user}}: </p>
+		<p class="commentMessage">{{comment.message}}</p>
+		<br>
+	</div>
+</div>
+
 
 </body>
 </html>
+

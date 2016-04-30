@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Voting Web</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+  
+	.navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+	
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 1500px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;} 
+    }
+	
+	#logout{
+		display: none;
+	}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Voting Web</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="./vote_bs.html">Home</a></li>
+      </ul>
+      <form id="login" class="navbar-form navbar-right">
+        <div class="form-group">
+          <input type="text" id="username" class="form-control" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <input type="password" id="password" class="form-control" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-default" id="login_btn">Login</button>
+		<button type="submit" class="btn btn-default" id="register_btn">Register</button>
+      </form>
+	  <form id="logout" class="navbar-form navbar-right">
+		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#voteCreateDialog">New Vote</button>
+		<button id="logout_btn" class="btn btn-default">Log Out</button>
+      </form>
+      
+    </div>
+  </div>
+</nav>
+<br>
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">Vote List</div>
+        <div class="panel-body">
+          <p>Click 'Detail' to vote</p>
+        </div>
+		<hr>
+        <div id="votelist">
+			<table class="listtable table table-bordered">
+				<tr>
+					<th>Details:</th>
+					<th>Vote Name:</th>
+					<th>Initiator:</th>
+					<th>Vote Counts:</th>
+				</tr>
+			</table>
+		</div>
+      </div>
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+</div>
+
+<footer class="container-fluid">
+  <p>CSE503 Creative Project by Yitong Ding</p>
+</footer>
+
+
+<!-- new regsiter code, this is a jQ dialog -->
+<div id="register" title="register page">
+    <input type="text" id="new_username" placeholder="New Username" />
+    <input type="password" id="new_password" placeholder="New Password" />
+    <button id="new_register_btn">Register</button>
+</div>
+
+</div>
+
+<script type="text/javascript" src="log.js"></script>
+<script type="text/javascript" src="vote.js"></script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="voteCreateDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div id="voteDialog">	
+			<form>
+				<div class="form-group">
+					<label for="nameCreate">Vote Name</label>
+					<input type="text" id="nameCreate" class="form-control" name="newName">
+				</div>
+				<div class="form-group">
+					<label for="option1">Option1</label>
+					<input type="text" class="optionCreate form-control" id="option1" name="option1">
+				</div>	
+				<div class="form-group">
+					<label for="option2">Option2</label>
+					<input type="text" class="optionCreate form-control" id="option2" name="option2">
+				</div>
+				<div class="form-group">
+					<label for="option3">Option3</label>
+					<input type="text" class="optionCreate form-control" id="option3" name="option3">
+				</div>
+				<div class="form-group">
+					<label for="option4">Option4</label>
+					<input type="text" class="optionCreate form-control" id="option4" name="option4">
+				</div>
+				<div class="form-group">
+					<label for="option5">Option5</label>
+					<input type="text" class="optionCreate form-control" id="option5" name="option5">
+				</div>
+			</form>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="newVoteSubmitBtn" class="submitCreate btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
